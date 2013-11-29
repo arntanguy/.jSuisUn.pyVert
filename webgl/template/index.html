@@ -30,10 +30,6 @@ void main()
 </script>
 
 <script type="x-shader/x-fragment" id="fragmentShader">
-#ifdef GL_ES
-precision highp float;
-#endif
-
 varying vec2 vUv;        
 uniform sampler2D texture1;
 
@@ -41,9 +37,6 @@ uniform sampler2D texture1;
 void main(void)
 {
     vec2 position = vUv;
-    vec3 rgb = vec3(1., 0., 0.);
-    vec4 color = vec4(rgb, 1.);
-    //gl_FragColor = color;
     gl_FragColor = texture2D(texture1, vUv); 
 }
 </script>
@@ -130,39 +123,53 @@ scene.add( mesh );
 
 
 //these should reference their respective shaders
+//vertShader = document.getElementById('vertexShader').innerHTML;
+//fragShader = document.getElementById('fragmentShader').innerHTML;
+//
+//attributes = {};
+//uniforms = {
+//    texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "obj/textured_cube/peppers.png" ) }
+//};
+//
+//material = new THREE.ShaderMaterial({
+//    uniforms: uniforms,
+//    attributes: attributes,
+//    vertexShader: vertShader,
+//    fragmentShader: fragShader,
+//    transparent: true
+//});
 
-vertShader = document.getElementById('vertexShader').innerHTML;
-fragShader = document.getElementById('fragmentShader').innerHTML;
-attributes = {};
+//loader.load( "obj/textured_cube/cube.js", function( geometry, materials ) {
+//        // For shaders
+//        //mesh = new THREE.Mesh( geometry, material );
+//        material = new THREE.MeshFaceMaterial( materials );
+//        mesh = new THREE.MeshFaceMaterial(geometry, materials);
+//        mesh.scale.set( 0.3, 0.3, 0.3 );
+//        mesh.position.y = 0;
+//        mesh.position.x = 0;
+//        scene.add( mesh );
+//        } );
+//}
 
-uniforms = {
-    texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "obj/textured_cube/peppers.png" ) }
-};
-
-
-material = new THREE.ShaderMaterial({
-
-uniforms: uniforms,
-
-attributes: attributes,
-
-vertexShader: vertShader,
-
-fragmentShader: fragShader,
-
-transparent: true
-
-});
 
 loader = new THREE.JSONLoader(true);
-
 loader.load( "obj/textured_cube/cube.js", function( geometry, materials ) {
-        mesh = new THREE.Mesh( geometry, material );
-        mesh.scale.set( 0.3, 0.3, 0.3 );
-        mesh.position.y = 0;
-        mesh.position.x = 0;
-        scene.add( mesh );
-        } );
+mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials )  );
+mesh.scale.set( 0.3, 0.3, 0.3 );
+mesh.position.y = 0;
+mesh.position.x = 0;
+scene.add( mesh );
+} );
+
+
+        // add subtle blue ambient lighting
+      var ambientLight = new THREE.AmbientLight(0x000044);
+      scene.add(ambientLight);
+      
+      // directional lighting
+      var directionalLight = new THREE.DirectionalLight(0xffffff);
+      directionalLight.position.set(1, 1, 1).normalize();
+      scene.add(directionalLight);
 }
 
 // animation loop
