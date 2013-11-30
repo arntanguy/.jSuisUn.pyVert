@@ -139,7 +139,7 @@
 
     function loadFromJSON() {
         var loader = new THREE.JSONLoader(true);
-        loader.load( "../../assets/js/RubberDuck.js", function( geometry, materials ) {
+        loader.load( "../../assets/js/scene.js", function( geometry, materials ) {
             console.log(materials);
         var mesh = new Physijs.BoxMesh(
             geometry, new THREE.MeshFaceMaterial( materials )  );
