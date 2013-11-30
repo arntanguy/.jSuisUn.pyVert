@@ -25,7 +25,7 @@
 		"colorDiffuse" : [0.6400000190734865, 0.6400000190734865, 0.6400000190734865],
 		"colorSpecular" : [0.5, 0.5, 0.5],
 		"depthTest" : true,
-		"depthWrite" : true,
+		"depthWrite" : false,
 		"shading" : "Lambert",
 		"specularCoef" : 50,
 		"transparency" : 1.0,
