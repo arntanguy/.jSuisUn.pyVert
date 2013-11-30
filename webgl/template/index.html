@@ -113,14 +113,6 @@ cameraControls	= new THREEx.DragPanControls(camera)
         document.getElementById('inlineDoc').innerHTML	+= "- <i>f</i> for fullscreen";
     }
 
-// here you add your objects
-// - you will most likely replace this part by your own
-var geometry	= new THREE.TorusGeometry( 1, 0.42 );
-var material	= new THREE.MeshNormalMaterial();
-var mesh	= new THREE.Mesh( geometry, material );
-scene.add( mesh );
-
-
 
 //these should reference their respective shaders
 //vertShader = document.getElementById('vertexShader').innerHTML;
@@ -153,7 +145,7 @@ scene.add( mesh );
 
 
 loader = new THREE.JSONLoader(true);
-loader.load( "obj/textured_cube/cube.js", function( geometry, materials ) {
+loader.load( "obj/RubberDuck.js", function( geometry, materials ) {
 mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials )  );
 mesh.scale.set( 0.3, 0.3, 0.3 );
 mesh.position.y = 0;
@@ -163,7 +155,7 @@ scene.add( mesh );
 
 
         // add subtle blue ambient lighting
-      var ambientLight = new THREE.AmbientLight(0x000044);
+      var ambientLight = new THREE.AmbientLight(0x00ffff);
       scene.add(ambientLight);
       
       // directional lighting
