@@ -151,6 +151,8 @@
 
 		<script src="../../libs/three.js/Detector.js"></script>
 		<script src="../../libs/three.js/Stats.js"></script>
+		<script src="../../libs/PhysicsSceneLoader.js"></script>
+	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
 
 		<script>
 
@@ -158,6 +160,9 @@
 
 			var SCREEN_WIDTH = window.innerWidth;
 			var SCREEN_HEIGHT = window.innerHeight;
+
+	        Physijs.scripts.worker = '../../libs/physijs/physijs_worker.js';
+	        Physijs.scripts.ammo = '../../libs/physijs/examples/js/ammo.js';
 
 			var container,stats;
 
@@ -215,6 +220,7 @@
 
 			}
 
+
 			function init() {
 
 				container = document.createElement( 'div' );
@@ -229,6 +235,8 @@
 				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
 				renderer.domElement.style.position = "relative";
 				container.appendChild( renderer.domElement );
+
+
 
 				stats = new Stats();
 				stats.domElement.style.position = 'absolute';
@@ -259,7 +267,9 @@
 
 				var callbackFinished = function( result ) {
 
-					loaded = result;
+                    console.log(result);
+
+                    loaded = result;
 
 					$( "message" ).style.display = "none";
 					$( "progressbar" ).style.display = "none";
@@ -272,14 +282,14 @@
 
 				$( "progress" ).style.display = "block";
 
-				var loader = new THREE.SceneLoader();
-				loader.callbackProgress = callbackProgress;
 
+                //THREE.Scene.prototype = Physijs.Scene.prototype
+				var loader = new PhysicsSceneLoader();
+				loader.callbackProgress = callbackProgress;
 				loader.load( "../../assets/js/scene.js", callbackFinished );
 
-				$( "plus_exp" ).addEventListener( 'click', createToggle( "exp" ), false );
 
-				//
+				$( "plus_exp" ).addEventListener( 'click', createToggle( "exp" ), false );
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
@@ -303,6 +313,12 @@
 
 			}
 
+
+    
+            /**
+             * Start scene
+             * Play physics simulation
+             **/
 			function onStartClick() {
 
 				$( "progress" ).style.display = "none";
@@ -312,7 +328,26 @@
 				camera.updateProjectionMatrix();
 
 				scene = loaded.scene;
+		        scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+		        scene.addEventListener(
+		        	'update',
+		        	function() {
+		        		scene.simulate( undefined, 1 );
+		        		//physics_stats.update();
+		        	}
+		        );
 
+                /**
+                 * Get "ground" mesh object, and assign its mass to 0
+                 */
+                loaded.objects["Ground"].mass = 0;
+
+
+
+                // Run at 60FPS target
+		        requestAnimationFrame( render );
+                // Simulate physics
+		        scene.simulate();
 			}
 
 			function onDocumentMouseMove(event) {
@@ -322,19 +357,24 @@
 
 			}
 
+            /**
+             * Creates a dummy loading scene full of cubes
+             */
 			function createLoadScene() {
 
 				var result = {
 
-					scene:  new THREE.Scene(),
+					scene:  new THREE.Scene,
 					camera: new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
 
 				};
-
 				result.camera.position.z = 100;
 
 				var object, geometry, material, light, count = 500, range = 200;
 
+                /**
+                 * Display loading scene: loads of random cubes
+                 */
 				material = new THREE.MeshLambertMaterial( { color:0xffffff } );
 				geometry = new THREE.CubeGeometry( 5, 5, 5 );
 
@@ -370,7 +410,6 @@
 
 			}
 
-			//
 
 			function animate() {
 
@@ -378,7 +417,6 @@
 
 				render();
 				stats.update();
-
 			}
 
 			function render() {
@@ -392,7 +430,12 @@
 
 			}
 
-			// Scene explorer user interface
+            /* ================================================================================ 
+             * SCENE EXPLORER
+             * Just for debug purposes
+             * This section is used to display all available objects and
+             * properties into an html tree
+             *  =============================================================================== */
 
 			function toggle( id ) {
 
@@ -427,6 +470,10 @@
 
 			}
 
+            /**
+             * Add objects into HTML tree
+             * Just for debug purposes
+             */
 			function generateSection( label, id, objects ) {
 
 				var html = "";
@@ -445,6 +492,10 @@
 
 			}
 
+            /**
+             * Add objects into HTML tree
+             * Just for debug purposes
+             */
 			function generateSceneView( result ) {
 
 				var config = [
@@ -464,6 +515,9 @@
 				return html;
 
 			}
+            /* ================================================================================ 
+             * END SCENE EXPLORER
+             *  =============================================================================== */
 
 		</script>
 
