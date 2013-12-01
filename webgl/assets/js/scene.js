@@ -9,7 +9,7 @@
 	"objects"       : 5,
 	"geometries"    : 3,
 	"materials"     : 3,
-	"textures"      : 0
+	"textures"      : 1
 },
 
 "urlBaseType" : "relativeToScene",
@@ -49,7 +49,7 @@
 		"geometry"  : "geo_Cube.002",
 		"groups"    : [  ],
 		"material"  : "Material",
-		"position"  : [ -0.000708131, 2.19846, -1.92366 ],
+		"position"  : [ -0.000708103, 2.19846, -1.92366 ],
 		"rotation"  : [ -1.5708, 0, 0 ],
 		"quaternion": [ -0.707107, 0, 0, 0.707107 ],
 		"scale"     : [ 1, 1, 1 ],
@@ -99,11 +99,20 @@
 },
 
 
+"textures" :
+{
+	"negx.jpg" : {
+		"url": "negx.jpg",
+        "wrap": ["repeat", "repeat"]
+	}
+},
+
+
 "materials" :
 {
 	"Material" : {
 		"type": "MeshLambertMaterial",
-		"parameters": { "color": 1256099, "ambient": 1256099, "opacity": 1, "blending": "NormalBlending" }
+		"parameters": { "color": 1256099, "ambient": 1256099, "opacity": 1, "map": "negx.jpg", "blending": "NormalBlending" }
 	},
 
 	"Material.001" : {
