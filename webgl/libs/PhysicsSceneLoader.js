@@ -336,11 +336,44 @@ PhysicsSceneLoader.prototype = {
 
 							} else {
 
-                                //XXX here
-                                // XXX todo: read property to know wich type of
-                                // mesh to load
-                                // It will be one of those https://github.com/chandlerprall/Physijs/wiki/Basic-Shapes
-								object = new Physijs.BoxMesh( geometry, material );
+                                // Load the Physijs object type
+                                // XXX: ask marco about avoiding the switch
+                                object = {};
+                                console.log(objJSON.physicsShape);
+                                switch(objJSON.physicsShape) {
+                                   case 'BoxMesh':
+                                       object = new Physijs.BoxMesh( geometry, material );
+                                       break;
+                                   case 'PlaneMesh':
+                                       object = new Physijs.PlaneMesh( geometry, material );
+                                       break;
+                                   case 'SphereMesh':
+                                       object = new Physijs.SphereMesh( geometry, material );
+                                       break;
+                                   case 'CylinderMesh':
+                                       object = new Physijs.CylinderMesh( geometry, material );
+                                       break;
+                                   case 'ConeMesh':
+                                       object = new Physijs.ConeMesh( geometry, material );
+                                       break;
+                                   case 'CapsuleMesh':
+                                       object = new Physijs.CapsuleMesh( geometry, material );
+                                       break;
+                                   case 'ConvexMesh':
+                                       object = new Physijs.ConvexMesh( geometry, material );
+                                       break;
+                                   case 'ConcaveMesh':
+                                       object = new Physijs.ConcaveMesh( geometry, material );
+                                       break;
+                                   case 'HeightfieldMesh':
+                                       object = new Physijs.HeightfieldMesh( geometry, material );
+                                       break;
+                                   default:
+                                       console.warn("Using default physijs geometry: BoxMesh for object "+objID);
+                                       object = new Physijs.BoxMesh( geometry, material );
+                                       break;
+
+                                }
 
 							}
 

@@ -6,10 +6,10 @@
 	"type"          : "scene",
 	"sourceFile"    : "scene.blend",
 	"generatedBy"   : "Blender 2.65 Exporter",
-	"objects"       : 5,
-	"geometries"    : 3,
+	"objects"       : 7,
+	"geometries"    : 4,
 	"materials"     : 3,
-	"textures"      : 1
+	"textures"      : 0
 },
 
 "urlBaseType" : "relativeToScene",
@@ -17,49 +17,77 @@
 
 "objects" :
 {
-	"Ground" : {
-		"geometry"  : "geo_Cube.001",
+	"Plane.001" : {
+		"geometry"  : "geo_Plane.001",
 		"groups"    : [  ],
-		"material"  : "Material.003",
-		"position"  : [ -0.55329, -4.29008, 0.702181 ],
+		"material"  : "Material.001",
+		"position"  : [ 1.21357, -0.428967, 12.0661 ],
 		"rotation"  : [ -1.5708, 0, 0 ],
 		"quaternion": [ -0.707107, 0, 0, 0.707107 ],
-		"scale"     : [ 5.64934, 5.84368, 1 ],
+		"scale"     : [ 8.42497, 8.42496, 8.42496 ],
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
 		"doubleSided"   : false,
+                "physicsShape"  : "PlaneMesh",
 		"physicsMass"   : 0.0
 	},
 
 	"Suzanne" : {
 		"geometry"  : "geo_Suzanne",
 		"groups"    : [  ],
-		"material"  : "Material.001",
-		"position"  : [ -0.800195, 1.77455, 0.408901 ],
+		"material"  : "Material.002",
+		"position"  : [ 1.24655, 3.12385, -2.33983 ],
 		"rotation"  : [ 7.79399e-08, 0, -0 ],
 		"quaternion": [ 3.897e-08, 0, 0, 1 ],
-		"scale"     : [ 1, 1, 1 ],
+		"scale"     : [ 0.690827, 0.690827, 0.690827 ],
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
 		"doubleSided"   : false,
-		"physicsMass"   : 6.396484375
+                "physicsShape"  : "SphereMesh",
+		"physicsMass"   : 0.0771484375
+	},
+
+	"Plane" : {
+		"geometry"  : "geo_Plane",
+		"groups"    : [  ],
+		"material"  : "Material.001",
+		"position"  : [ 1.21357, 1.23282, -1.80915 ],
+		"rotation"  : [ -1.51948, 0, 0 ],
+		"quaternion": [ -0.688734, 0, 0, 0.725015 ],
+		"scale"     : [ -6.76114, -6.76114, -6.76114 ],
+		"visible"       : true,
+		"castShadow"    : false,
+		"receiveShadow" : false,
+		"doubleSided"   : false,
+                "physicsShape"  : "PlaneMesh",
+		"physicsMass"   : 0.0
 	},
 
 	"Cube" : {
-		"geometry"  : "geo_Cube.002",
+		"geometry"  : "geo_Cube.001",
 		"groups"    : [  ],
 		"material"  : "Material",
-		"position"  : [ -0.000708103, 2.19846, -1.92366 ],
+		"position"  : [ 1.92323, 3.46272, -3.34103 ],
 		"rotation"  : [ -1.5708, 0, 0 ],
 		"quaternion": [ -0.707107, 0, 0, 0.707107 ],
-		"scale"     : [ 1, 1, 1 ],
+		"scale"     : [ 0.690827, 0.690827, 0.690827 ],
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
 		"doubleSided"   : false,
+                "physicsShape"  : "BoxMesh",
 		"physicsMass"   : 0.0
+	},
+
+	"Sun" : {
+		"type"       : "AmbientLight",
+		"position"   : [ -14.3081, 11.4284, -1.52643 ],
+		"rotation"   : [ 0, 0, 0 ],
+		"color"      : 16777215,
+		"distance"   : 25.000,
+		"intensity"  : 1.000
 	},
 
 	"Lamp" : {
@@ -68,7 +96,7 @@
 		"rotation"   : [ 0.650328, 1.86639, 0.0552171 ],
 		"color"      : 16777215,
 		"distance"   : 30.000,
-		"intensity"  : 4.960
+		"intensity"  : 1.000
 	},
 
 	"Camera" : {
@@ -77,7 +105,7 @@
 		"aspect": 1.333000,
 		"near"  : 0.100000,
 		"far"   : 100.000000,
-		"position": [ 7.48113, 5.34367, 6.50764 ],
+		"position": [ 7.22805, 5.77115, 18.8399 ],
 		"target"  : [ 0, 0, 0 ]
 	}
 },
@@ -85,9 +113,9 @@
 
 "geometries" :
 {
-	"geo_Cube.001" : {
+	"geo_Plane.001" : {
 		"type" : "ascii",
-		"url"  : "scene.Cube.001.js"
+		"url"  : "scene.Plane.001.js"
 	},
 
 	"geo_Suzanne" : {
@@ -95,18 +123,14 @@
 		"url"  : "scene.Suzanne.js"
 	},
 
-	"geo_Cube.002" : {
+	"geo_Plane" : {
 		"type" : "ascii",
-		"url"  : "scene.Cube.002.js"
-	}
-},
+		"url"  : "scene.Plane.js"
+	},
 
-
-"textures" :
-{
-	"negx.jpg" : {
-		"url": "negx.jpg",
-        "wrap": ["repeat", "repeat"]
+	"geo_Cube.001" : {
+		"type" : "ascii",
+		"url"  : "scene.Cube.001.js"
 	}
 },
 
@@ -115,17 +139,17 @@
 {
 	"Material" : {
 		"type": "MeshLambertMaterial",
-		"parameters": { "color": 1256099, "ambient": 1256099, "opacity": 1, "map": "negx.jpg", "blending": "NormalBlending" }
+		"parameters": { "color": 1418052, "ambient": 1418052, "opacity": 1, "blending": "NormalBlending" }
 	},
 
 	"Material.001" : {
 		"type": "MeshLambertMaterial",
-		"parameters": { "color": 10682457, "ambient": 10682457, "opacity": 1, "blending": "NormalBlending" }
+		"parameters": { "color": 826019, "ambient": 826019, "opacity": 1, "blending": "NormalBlending" }
 	},
 
-	"Material.003" : {
+	"Material.002" : {
 		"type": "MeshLambertMaterial",
-		"parameters": { "color": 8454307, "ambient": 8454307, "opacity": 1, "blending": "NormalBlending" }
+		"parameters": { "color": 10682493, "ambient": 10682493, "opacity": 1, "blending": "NormalBlending" }
 	}
 },
 

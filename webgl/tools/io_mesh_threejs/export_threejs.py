@@ -144,6 +144,7 @@ TEMPLATE_OBJECT = """\
 		"castShadow"    : %(castShadow)s,
 		"receiveShadow" : %(receiveShadow)s,
 		"doubleSided"   : %(doubleSided)s,
+                "physicsShape"  : "%(physicsShape)s",
 		"physicsMass"   : %(physicsMass)s
 	}"""
 
@@ -1752,6 +1753,7 @@ def generate_objects(data):
             receiveShadow = obj.THREE_receiveShadow
             doubleSided = obj.THREE_doubleSided
             Physics.mass= obj.THREE_physicsMass
+            Physics.shape = obj.THREE_physicsShape
 
             visible = True
 
@@ -1772,6 +1774,7 @@ def generate_objects(data):
             "receiveShadow"  : generate_bool_property(receiveShadow),
             "doubleSided"  : generate_bool_property(doubleSided),
             "visible"      : generate_bool_property(visible),
+            "physicsShape" : Physics.shape,
             "physicsMass" : Physics.mass
             }
             chunks.append(object_string)

@@ -19,10 +19,10 @@
 	"materials" : [	{
 		"DbgColor" : 15658734,
 		"DbgIndex" : 0,
-		"DbgName" : "Material.001",
+		"DbgName" : "Material.002",
 		"blending" : "NormalBlending",
-		"colorAmbient" : [0.6400000190734865, 0.0, 0.350599365690341],
-		"colorDiffuse" : [0.6400000190734865, 0.0, 0.350599365690341],
+		"colorAmbient" : [0.6400000190734865, 0.0, 0.4933807446566334],
+		"colorDiffuse" : [0.6400000190734865, 0.0, 0.4933807446566334],
 		"colorSpecular" : [0.5, 0.5, 0.5],
 		"depthTest" : true,
 		"depthWrite" : true,

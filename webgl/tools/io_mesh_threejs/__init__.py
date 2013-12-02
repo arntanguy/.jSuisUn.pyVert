@@ -56,6 +56,18 @@ bpy.types.Object.THREE_castShadow = bpy.props.BoolProperty()
 bpy.types.Object.THREE_receiveShadow = bpy.props.BoolProperty()
 bpy.types.Object.THREE_doubleSided = bpy.props.BoolProperty()
 bpy.types.Object.THREE_exportGeometry = bpy.props.BoolProperty(default = True)
+#sequence of tuples formated (identifier, name, description, icon, number)
+bpy.types.Object.THREE_physicsShape = bpy.props.EnumProperty(
+    items = [('BoxMesh', 'BoxMesh', 'Cube-like mesh'),
+            ('PlaneMesh', 'PlaneMesh', 'Plane'),
+            ('SphereMesh', 'SphereMesh', 'Sphere'),
+            ('CylinderMesh', 'CylinderMesh', 'Cylinder'),
+            ('ConeMesh', 'ConeMesh', 'Cone'),
+            ('CapsuleMesh', 'CapsuleMesh', 'Capsule'),
+            ('ConvexMesh', 'ConvexMesh', 'Convex hull of object'),
+            ('ConcaveMesh', 'ConcaveMesh', 'Concave'),
+            ('HeightfieldMesh', 'HeightfieldMesh', 'matches a regular grid of height values given in the z-coordinatesHeightfield')],
+    name = "Mesh Type")
 bpy.types.Object.THREE_physicsMass = bpy.props.FloatProperty()
 
 bpy.types.Material.THREE_useVertexColors = bpy.props.BoolProperty()
@@ -107,6 +119,9 @@ class OBJECT_PT_physics( bpy.types.Panel ):
     def draw(self, context):
         layout = self.layout
         obj = context.object
+
+        row = layout.row()
+        row.prop( obj, "THREE_physicsShape", text="Shape" )
 
         row = layout.row()
         row.prop( obj, "THREE_physicsMass", text="Mass" )
