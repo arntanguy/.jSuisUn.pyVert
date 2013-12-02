@@ -28,7 +28,8 @@
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
-		"doubleSided"   : false
+		"doubleSided"   : false,
+		"physicsMass"   : 0.0
 	},
 
 	"Suzanne" : {
@@ -42,7 +43,8 @@
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
-		"doubleSided"   : false
+		"doubleSided"   : false,
+		"physicsMass"   : 6.396484375
 	},
 
 	"Cube" : {
@@ -56,7 +58,8 @@
 		"visible"       : true,
 		"castShadow"    : false,
 		"receiveShadow" : false,
-		"doubleSided"   : false
+		"doubleSided"   : false,
+		"physicsMass"   : 0.0
 	},
 
 	"Lamp" : {

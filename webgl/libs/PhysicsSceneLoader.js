@@ -337,6 +337,9 @@ PhysicsSceneLoader.prototype = {
 							} else {
 
                                 //XXX here
+                                // XXX todo: read property to know wich type of
+                                // mesh to load
+                                // It will be one of those https://github.com/chandlerprall/Physijs/wiki/Basic-Shapes
 								object = new Physijs.BoxMesh( geometry, material );
 
 							}
@@ -374,6 +377,9 @@ PhysicsSceneLoader.prototype = {
 							object.visible = objJSON.visible;
 							object.castShadow = objJSON.castShadow;
 							object.receiveShadow = objJSON.receiveShadow;
+                            // Set mass property of physijs
+                            object.mass = objJSON.physicsMass;
+                            console.log("Mass for "+objID+": " + object.physicsMass);
 
 							parent.add( object );
 

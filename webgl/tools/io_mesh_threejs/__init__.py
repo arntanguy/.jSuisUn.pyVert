@@ -56,6 +56,7 @@ bpy.types.Object.THREE_castShadow = bpy.props.BoolProperty()
 bpy.types.Object.THREE_receiveShadow = bpy.props.BoolProperty()
 bpy.types.Object.THREE_doubleSided = bpy.props.BoolProperty()
 bpy.types.Object.THREE_exportGeometry = bpy.props.BoolProperty(default = True)
+bpy.types.Object.THREE_physicsMass = bpy.props.FloatProperty()
 
 bpy.types.Material.THREE_useVertexColors = bpy.props.BoolProperty()
 bpy.types.Material.THREE_depthWrite = bpy.props.BoolProperty(default = True)
@@ -94,6 +95,22 @@ class OBJECT_PT_hello( bpy.types.Panel ):
 
         row = layout.row()
         row.prop( obj, "THREE_doubleSided", text="Double sided" )
+
+## Add physics section to the Mesh interface
+class OBJECT_PT_physics( bpy.types.Panel ):
+
+    bl_label = "PHYSICS"
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
+    bl_context = "object"
+
+    def draw(self, context):
+        layout = self.layout
+        obj = context.object
+
+        row = layout.row()
+        row.prop( obj, "THREE_physicsMass", text="Mass" )
+
 
 class MATERIAL_PT_hello( bpy.types.Panel ):
 

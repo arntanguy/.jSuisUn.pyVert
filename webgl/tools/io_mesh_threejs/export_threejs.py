@@ -33,6 +33,12 @@ import math
 import operator
 import random
 
+
+## Define physics parameters here
+class Physics:
+    mass = 0
+
+
 # #####################################################
 # Configuration
 # #####################################################
@@ -137,7 +143,8 @@ TEMPLATE_OBJECT = """\
 		"visible"       : %(visible)s,
 		"castShadow"    : %(castShadow)s,
 		"receiveShadow" : %(receiveShadow)s,
-		"doubleSided"   : %(doubleSided)s
+		"doubleSided"   : %(doubleSided)s,
+		"physicsMass"   : %(physicsMass)s
 	}"""
 
 TEMPLATE_EMPTY = """\
@@ -796,7 +803,7 @@ def generate_bones(option_bones, flipyz):
         else:
             joint = TEMPLATE_BONE % (boneIndex, bone.name, bonePosWorld.x, bonePosWorld.y, bonePosWorld.z)
             hierarchy.append(joint)
-                
+
     bones_string = ",".join(hierarchy)
 
     return bones_string, len(armature.bones)
@@ -854,7 +861,7 @@ def generate_indices_and_weights(meshes, option_skinning):
 
                 if i < len(bone_array):
                     bone_proxy = bone_array[i]
-                    
+
                     found = 0
                     index = bone_proxy[0]
                     weight = bone_proxy[1]
@@ -1494,8 +1501,8 @@ def extract_meshes(objects, scene, export_single_model, option_scale, flipyz):
 
                 else:
                     mesh.transform(object.matrix_world)
-                    
-                    
+
+
             mesh.update(calc_tessface=True)
 
             mesh.calc_normals()
@@ -1744,6 +1751,7 @@ def generate_objects(data):
             castShadow = obj.THREE_castShadow
             receiveShadow = obj.THREE_receiveShadow
             doubleSided = obj.THREE_doubleSided
+            Physics.mass= obj.THREE_physicsMass
 
             visible = True
 
@@ -1763,7 +1771,8 @@ def generate_objects(data):
             "castShadow"  : generate_bool_property(castShadow),
             "receiveShadow"  : generate_bool_property(receiveShadow),
             "doubleSided"  : generate_bool_property(doubleSided),
-            "visible"      : generate_bool_property(visible)
+            "visible"      : generate_bool_property(visible),
+            "physicsMass" : Physics.mass
             }
             chunks.append(object_string)
 
@@ -2105,7 +2114,7 @@ def generate_materials_scene(data):
         if mat.use_fake_user:
             minimum_users = 2 #we must ignore the "fake user" in this case
         return mat.users >= minimum_users
-    
+
     used_materials = [m for m in bpy.data.materials if material_is_used(m)]
 
     for m in used_materials:
