@@ -152,6 +152,7 @@
 		<script src="../../libs/three.js/Detector.js"></script>
 		<script src="../../libs/three.js/Stats.js"></script>
 		<script src="../../libs/PhysicsSceneLoader.js"></script>
+		<script src="../../tools/helpers/AxisHelper.js"></script>
 	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
 
 		<script>
@@ -328,7 +329,9 @@
 				camera.updateProjectionMatrix();
 
 				scene = loaded.scene;
-		        scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+		        scene.setGravity(new THREE.Vector3( 0, -9.8, 0 ));
+                console.log("Scene type");
+                console.log(scene);
 		        scene.addEventListener(
 		        	'update',
 		        	function() {
@@ -342,6 +345,9 @@
                  */
                 //loaded.objects["Ground"].mass = 0;
 
+                console.log("Cube pos: "+loaded.objects["Cube"]);
+                var axis = new THREE.AxisHelper(20);
+                scene.add(axis);
 
 
                 // Run at 60FPS target
