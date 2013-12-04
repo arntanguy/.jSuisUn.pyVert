@@ -37,8 +37,7 @@
 		<div id="info">Simple Cloth Simulation<br/>
 			Verlet integration with Constrains relaxation<br/>
 			Toggle: <a onclick="rotate = !rotate;">Camera</a> |
-			<a onclick="wind = !wind;">Wind</a> |
-			<a onclick="togglePins();">Pins</a>
+			<a onclick="wind = !wind;">Wind</a>
 		</div>
 
 		<script src="../../../libs/three.js/three.min.js"></script>
@@ -213,44 +212,7 @@
 
 				// poles
 
-				var poleGeo = new THREE.CubeGeometry( 5, 375, 5 );
-				var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );
-
-				var mesh = new THREE.Mesh( poleGeo, poleMat );
-				mesh.position.x = -125;
-				mesh.position.y = -62;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
-
-				var mesh = new THREE.Mesh( poleGeo, poleMat );
-				mesh.position.x = 125;
-				mesh.position.y = -62;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
-
-				var mesh = new THREE.Mesh( new THREE.CubeGeometry( 255, 5, 5 ), poleMat );
-				mesh.position.y = -250 + 750/2;
-				mesh.position.x = 0;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
-
-				var gg = new THREE.CubeGeometry( 10, 10, 10 );
-				var mesh = new THREE.Mesh( gg, poleMat );
-				mesh.position.y = -250;
-				mesh.position.x = 125;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
-
-				var mesh = new THREE.Mesh( gg, poleMat );
-				mesh.position.y = -250;
-				mesh.position.x = -125;
-				mesh.receiveShadow = true;
-				mesh.castShadow = true;
-				scene.add( mesh );
+				createPoles(scene);
 
 				//
 
@@ -336,6 +298,53 @@
 
 				renderer.render( scene, camera );
 
+			}
+
+			function createPoles(scene) {
+				var poleGeo = new THREE.CubeGeometry( 5, 375, 5 );
+				var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );
+
+				// Vertical pole nearest to the "C" of CGI
+				var mesh = new THREE.Mesh( poleGeo, poleMat );
+				mesh.position.x = -125;
+				mesh.position.y = -62;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+
+				// Vertical pole nearest to the "C" of CGI
+				var mesh = new THREE.Mesh( poleGeo, poleMat );
+				mesh.position.x = 125;
+				mesh.position.y = -62;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+
+				// Horizontal pole at the top
+				var mesh = new THREE.Mesh( new THREE.CubeGeometry( 255, 5, 5 ), poleMat );
+				mesh.position.y = -250 + 750/2;
+				mesh.position.x = 0;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+
+
+				var gg = new THREE.CubeGeometry( 10, 10, 10 );
+				// Foot of the pole nearest to the "I" letter of CGI
+				var mesh = new THREE.Mesh( gg, poleMat );
+				mesh.position.y = -250;
+				mesh.position.x = 125;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
+
+				// Foot of the pole nearest to the "C" letter of CGI
+				var mesh = new THREE.Mesh( gg, poleMat );
+				mesh.position.y = -250;
+				mesh.position.x = -125;
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				scene.add( mesh );
 			}
 
 		</script>
