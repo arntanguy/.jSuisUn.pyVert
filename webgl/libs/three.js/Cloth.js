@@ -16,8 +16,8 @@ var MASS = .1;
 var restDistance = 25;
 
 
-var xSegs = 10; //
-var ySegs = 10; //
+var xSegs = 30; // Cloth width
+var ySegs = 30; // Cloth height
 
 var clothFunction = plane(restDistance * xSegs, restDistance * ySegs);
 
@@ -238,12 +238,6 @@ function simulate(time) {
 		constrain = constrains[i];
 		satisifyConstrains(constrain[0], constrain[1], constrain[2]);
 	}
-
-	// Ball Constrains
-
-
-	ballPosition.z = -Math.sin(Date.now()/600) * 90 ; //+ 40;
-	ballPosition.x = Math.cos(Date.now()/400) * 70
 
 	// Floor Constains
 	for (particles = cloth.particles, i=0, il = particles.length

@@ -26,27 +26,19 @@
 				cursor: pointer;
 			}
 
-			#stats { position: absolute; top:0; left: 0 }
-			#stats #fps { background: transparent !important }
-			#stats #fps #fpsText { color: #aaa !important }
-			#stats #fps #fpsGraph { display: none }
 		</style>
 	</head>
 
 	<body>
-		<div id="info">Simple Cloth Simulation<br/>
-			Verlet integration with Constrains relaxation<br/>
-			Toggle: <a onclick="rotate = !rotate;">Camera</a> |
+		<div id="info">Toggle:
+			<a onclick="rotate = !rotate;">Camera</a> |
 			<a onclick="wind = !wind;">Wind</a>
 		</div>
 
 		<script src="../../../libs/three.js/three.min.js"></script>
-
 		<script src="../../../libs/three.js/Detector.js"></script>
 		<script src="../../../libs/three.js/Stats.js"></script>
-
 		<script src="../../../libs/three.js/Cloth.js"></script>
-
 		<script type="x-shader/x-fragment" id="fragmentShaderDepth">
 
 			uniform sampler2D texture;
@@ -93,11 +85,16 @@
 
 			/* testing cloth simulation */
 
-			pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+			// Pins linking the cloth with the top pole
+			// There should be as many as the value of xSegs in Cloth.js
+			//pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+			pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+					11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+					21, 22, 23, 24, 25, 26, 27, 28, 29, 30 ];
 
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-			var container, stats;
+			var container;
 			var camera, scene, renderer;
 
 			var clothGeometry;
@@ -277,12 +274,12 @@
 			}
 
 			function createPoles(scene) {
-				var poleGeo = new THREE.CubeGeometry( 5, 375, 5 );
+				var poleGeo = new THREE.CubeGeometry( 5, 875, 5 ); // Vertical poles height
 				var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );
 
 				// Vertical pole nearest to the "C" of CGI
 				var mesh = new THREE.Mesh( poleGeo, poleMat );
-				mesh.position.x = -125;
+				mesh.position.x = -230; // Decrease to make the space between the two poles wider
 				mesh.position.y = -62;
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
@@ -290,15 +287,15 @@
 
 				// Vertical pole nearest to the "C" of CGI
 				var mesh = new THREE.Mesh( poleGeo, poleMat );
-				mesh.position.x = 125;
+				mesh.position.x = 230; // Increase to make the space between the two poles wider
 				mesh.position.y = -62;
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
 				scene.add( mesh );
 
 				// Horizontal pole at the top
-				var mesh = new THREE.Mesh( new THREE.CubeGeometry( 255, 5, 5 ), poleMat );
-				mesh.position.y = -250 + 750/2;
+				var mesh = new THREE.Mesh( new THREE.CubeGeometry( 465, 5, 5 ), poleMat ); // Horizontal pole width
+				mesh.position.y = -250 + 750/2 + 250; // -250 + 750/2 // Horizontal pole height
 				mesh.position.x = 0;
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
