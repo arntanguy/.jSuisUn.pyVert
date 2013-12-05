@@ -180,12 +180,12 @@
     
         </div>
 
-		<script src="../libs/three.js/three.js"></script>
-		<script src="../libs/three.js/Detector.js"></script>
-		<script src="../libs/three.js/Stats.js"></script>
-		<script src="../libs/three.js/controls/PointerLockControls.js"></script>
-		<script src="../libs/PhysicsSceneLoader.js"></script>
-		<script src="../tools/helpers/AxisHelper.js"></script>
+		<script src="../../libs/three.js/three.js"></script>
+		<script src="../../libs/three.js/Detector.js"></script>
+		<script src="../../libs/three.js/Stats.js"></script>
+		<script src="../../libs/three.js/controls/PointerLockControls.js"></script>
+		<script src="../../libs/PhysicsSceneLoader.js"></script>
+		<script src="../../tools/helpers/AxisHelper.js"></script>
 	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
 
 
@@ -311,7 +311,35 @@
 			}
 
 
+            // adding 3D sound to the world
+			var Sound = function ( sources, radius, volume ) {
 
+				var audio = document.createElement( 'audio' );
+
+				for ( var i = 0; i < sources.length; i ++ ) {
+					var source = document.createElement( 'source' );
+					source.src = sources[ i ];
+
+					audio.appendChild( source );
+				}
+
+				this.position = new THREE.Vector3();
+
+				this.play = function () {
+					audio.play();
+				}
+
+				this.update = function ( controls ) {
+					var distance = this.position.distanceTo( controls.getPosition() );
+					if ( distance <= radius ) {
+						audio.volume = volume * ( 1 - distance / radius );
+					} else {
+						audio.volume = 0;
+					}
+				}
+			}
+			
+			var game_sound;
 
 
 			init();
@@ -341,7 +369,6 @@
 					}
 				}
 			}
-
 
 			function init() {
 
@@ -373,6 +400,10 @@
 				stats.domElement.style.right = '0px';
 				stats.domElement.style.zIndex = 100;
 				container.appendChild( stats.domElement );
+				
+				game_sound = new Sound( [ '../minigame/sounds/minigame_background.ogg' ], 50, 1 );
+				game_sound.position.set(0, 10, 0);
+				game_sound.play();
 
 				$( "start" ).addEventListener( 'click', onStartClick, false );
 
@@ -415,7 +446,7 @@
 
 				var loader = new PhysicsSceneLoader();
 				loader.callbackProgress = callbackProgress;
-				loader.load( "../assets/js/scene.js", callbackFinished );
+				loader.load( "../../assets/js/scene.js", callbackFinished );
 
 
 				$( "plus_exp" ).addEventListener( 'click', createToggle( "exp" ), false );
@@ -601,6 +632,9 @@
 				time = Date.now();
                 
 				renderer.render( scene, camera );
+				game_sound.update( controls );
+				console.log("cam "+controls.getPosition().x+" "+controls.getPosition().y+" "+controls.getPosition().z);
+				console.log("sound "+game_sound.position.x+" "+game_sound.position.y+" "+game_sound.position.z);
 			}
 
 
