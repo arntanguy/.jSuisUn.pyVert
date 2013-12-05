@@ -177,4 +177,52 @@ THREE.PointerLockControls = function ( camera ) {
 
 	};
 
+    this.getPosition = function() {
+        return yawObject.position;
+    };
+
+    this.getLookDirection = function() {
+
+        var pitch = pitchObject.rotation.x;
+        var yaw = yawObject.rotation.y;
+
+        //xzLen = Math.cos(pitch);
+        //x = xzLen * Math.cos(yaw);
+        //y = Math.sin(pitch/2);
+        //z = xzLen * Math.sin(-yaw);
+        //console.log(pitch);
+        //console.log(yaw);
+
+        var sinPitch = Math.sin(pitch);
+        var cosPitch = Math.cos(pitch);
+        var sinYaw = Math.sin(yaw);
+        var cosYaw = Math.cos(yaw);
+       
+        x = sinPitch * cosYaw; 
+        y = sinPitch * sinYaw; 
+        z = cosPitch;
+
+       // var x = Math.cos(yaw)*Math.cos(pitch);
+       // var y = Math.sin(yaw)*Math.cos(pitch);
+       // var z = Math.sin(pitch);
+
+        //var x = cosPitch * sinYaw;
+        //var y = sinPitch;
+        //var z = sinPitch*sinYaw;
+
+        return new THREE.Vector3(x, y, z);
+    
+
+// pitch and yaw are in degrees
+   //var pitchRadians = Math.toRadians(pitch);
+   //var yawRadians = Math.toRadians(yaw);
+
+   //var sinPitch = Math.sin(pitchRadians);
+   //var cosPitch = Math.cos(pitchRadians);
+   //var sinYaw = Math.sin(yawRadians);
+   //var cosYaw = Math.cos(yawRadians);
+
+   //return new Vector3D(-cosPitch * sinYaw, sinPitch, -cosPitch * cosYaw);
+    };
+
 };

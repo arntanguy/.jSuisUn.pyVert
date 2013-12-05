@@ -368,6 +368,7 @@
 
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
+                console.log(controls);
 
 				ray = new THREE.Raycaster();
 				ray.ray.direction.set( 0, -1, 0 );
@@ -571,13 +572,28 @@
 			function renderLoadScene() {
 				renderer.render( scene, camera );
 			}
-
+            var material = new THREE.LineBasicMaterial({
+                    color: 0x0000ff
+                });
+            var line = {};
 			function render() {
 
                 /**
                  * Check for nearby objects in view direction 
                  **/
-                console.log(closestObject());
+                //console.log(closestObject());
+
+                var direction = controls.getLookDirection().clone();
+                var position = controls.getPosition().clone();
+
+                //// Debug direction
+                 var geometry = new THREE.Geometry();
+                 //geometry.vertices.push(new THREE.Vector3(0,0,0));
+                 geometry.vertices.push(position.add(direction.multiplyScalar(10)));
+                 geometry.vertices.push(position);
+                 scene.remove(line);
+                 line = new THREE.Line(geometry, material);
+                 scene.add(line);
 
 				controls.update( Date.now() - time );
 
@@ -617,16 +633,16 @@
             /**
              * Doesn't work
              **/
-            function rayCasting() {
-				ray.ray.origin.copy( controls.getObject().position );
-				//ray.ray.origin.y -= 10;
-                //console.log(ray.ray.origin.y);
+            function rayCasting(origin, direction) {
+                ray.ray.origin = origin.clone();
+                ray.ray.direction = direction.clone();
 
-				var intersections = ray.intersectObjects( loaded.objects );
+				var intersections = ray.intersectObjects( physicsObjects );
 				if ( intersections.length > 0 ) {
 					var distance = intersections[ 0 ].distance;
-					if ( distance > 0 && distance < 10 ) {
-					}
+                    console.log("intersection");
+					//if ( distance > 0 && distance < 10 ) {
+					//}
 				} 
 
             }
