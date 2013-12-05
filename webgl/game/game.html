@@ -530,7 +530,7 @@
 
 				g_ray = new THREE.Raycaster();
 				g_ray.ray.direction.set( 0, -1, 0 );
-						load_coincoin(g_scene,g_physicsObjects);
+				load_coincoin(g_scene,g_physicsObjects);
 
                 // Run at 60FPS target
 		        requestAnimationFrame( g_renderLoadScene );
@@ -609,7 +609,7 @@
 			}
 
 			function g_renderLoadScene() {
-				g_renderer.g_render( scene, g_camera );
+				g_renderer.render( g_scene, g_camera );
 			}
             var material = new THREE.LineBasicMaterial({
                     color: 0x0000ff
