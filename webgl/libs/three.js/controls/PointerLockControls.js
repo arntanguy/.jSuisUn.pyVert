@@ -184,57 +184,18 @@ THREE.PointerLockControls = function ( camera ) {
     this.getLookDirection = function() {
 
         var pitch = pitchObject.rotation.x;
-        var yaw = yawObject.rotation.y;
-		yaw += Math.PI/2
-
-        //var yaw = pitchObject.rotation.x;
-        //var pitch = yawObject.rotation.y;
-
-        //xzLen = Math.cos(pitch);
-        //x = xzLen * Math.cos(yaw);
-        //y = Math.sin(pitch/2);
-        //z = xzLen * Math.sin(-yaw);
-        //console.log(pitch);
-        //console.log(yaw);
-
-		//pitch=0;
-		//yaw=0;
-
+        var yaw = yawObject.rotation.y + Math.PI/2;
 
         var sinPitch = Math.sin(pitch);
         var cosPitch = Math.cos(pitch);
         var sinYaw = Math.sin(yaw);
         var cosYaw = Math.cos(yaw);
        
-		console.log(sinPitch);
-		console.log(cosPitch);
-
         var x = cosPitch * cosYaw; 
-        var z = - cosPitch * sinYaw; 
+        var z = -cosPitch * sinYaw; 
         var y = sinPitch;
 
-       // var x = Math.cos(yaw)*Math.cos(pitch);
-       // var y = Math.sin(yaw)*Math.cos(pitch);
-       // var z = Math.sin(pitch);
-
-        //var x = cosPitch * sinYaw;
-        //var y = sinPitch;
-        //var z = sinPitch*sinYaw;
-
         return new THREE.Vector3(x, y, z);
-        //return new THREE.Vector3(1,1,1);
-    
-
-// pitch and yaw are in degrees
-   //var pitchRadians = Math.toRadians(pitch);
-   //var yawRadians = Math.toRadians(yaw);
-
-   //var sinPitch = Math.sin(pitchRadians);
-   //var cosPitch = Math.cos(pitchRadians);
-   //var sinYaw = Math.sin(yawRadians);
-   //var cosYaw = Math.cos(yawRadians);
-
-   //return new Vector3D(-cosPitch * sinYaw, sinPitch, -cosPitch * cosYaw);
     };
 
 };
