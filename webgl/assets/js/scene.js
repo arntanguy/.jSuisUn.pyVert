@@ -381,7 +381,7 @@
 		"castShadow"    : false,
 		"receiveShadow" : true,
 		"doubleSided"   : false,
-                "physicsShape"  : "BoxMesh",
+                "physicsShape"  : "PlaneMesh",
 		"physicsMass"   : 0.0
 	},
 
