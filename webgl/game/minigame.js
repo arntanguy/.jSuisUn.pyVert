@@ -1,5 +1,5 @@
 'use strict';
-
+var MiniGame = function() {
 Physijs.scripts.worker = '../libs/physijs/physijs_worker.js';
 Physijs.scripts.ammo = 'examples/js/ammo.js';
 
@@ -420,4 +420,4 @@ function loadFromJSON(path) {
     });
 }
 
-
+};
