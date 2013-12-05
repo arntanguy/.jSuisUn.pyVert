@@ -217,6 +217,7 @@
 			var controls, time = Date.now();
             // Object pointed by mouse
 			var ray;
+            var debug = true;
 
 
             /* ======================== INIT POINTERLOCK ==================== */
@@ -359,7 +360,6 @@
 					material = result.materials[ m ];
 					if ( ! ( material instanceof THREE.MeshFaceMaterial ) ) {
 						if( !material.program ) {
-							//console.log(m);
 							renderer.initMaterial( material, result.scene.__lights, result.scene.fog );
 							count += 1;
 							if( count > pieces ) {
@@ -608,17 +608,24 @@
                  **/
                 //console.log(closestObject());
 
-                var direction = controls.getLookDirection().clone();
-                var position = controls.getPosition().clone();
+                direction = controls.getLookDirection().clone();
+                position = controls.getPosition().clone();
+
+                rayCasting(position.clone(), direction.clone());
 
                 //// Debug direction
-                 var geometry = new THREE.Geometry();
-                 geometry.vertices.push(new THREE.Vector3(0,0,0));
-                 geometry.vertices.push(position.add(direction.multiplyScalar(10)));
-                 //geometry.vertices.push(position);
-                 scene.remove(line);
-                 line = new THREE.Line(geometry, material);
-                 scene.add(line);
+                if(debug) {
+                    var geometry = new THREE.Geometry();
+                    //geometry.vertices.push(new THREE.Vector3(0,0,0));
+                    //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
+                    geometry.vertices.push(position.clone());
+                    geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
+                    scene.remove(line);
+                    line = new THREE.Line(geometry, material);
+                    scene.add(line);
+                }
+
+
 
 				controls.update( Date.now() - time );
 
@@ -663,15 +670,23 @@
              **/
             function rayCasting(origin, direction) {
                 ray.ray.origin = origin.clone();
-                ray.ray.direction = direction.clone();
+                ray.ray.direction = direction.clone().normalize();
 
-				var intersections = ray.intersectObjects( physicsObjects );
-				if ( intersections.length > 0 ) {
-					var distance = intersections[ 0 ].distance;
-                    console.log("intersection");
-					//if ( distance > 0 && distance < 10 ) {
-					//}
-				} 
+
+                for (var m in physicsObjects) {
+                    var intersects = ray.intersectObject( physicsObjects[m] );
+
+                    if ( intersects.length > 0 ) {
+                        // Normal vector of the meshes' face we hit
+                        //var nV = intersects[0].face.normal;
+                        // Velocity vector (of the character)
+                        //var vV = this.velocity.clone();
+                        //// And calculate the reflection vector
+                        //var rV = n.multiplyScalar(-2 * vV.dot(nV)).addSelf(vV);;
+
+                        console.log("intersect with "+physicsObjects[m].name);
+                    }
+                }
 
             }
 
