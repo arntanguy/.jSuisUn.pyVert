@@ -187,11 +187,12 @@
 		<script src="../../libs/PhysicsSceneLoader.js"></script>
 		<script src="../../tools/helpers/AxisHelper.js"></script>
 	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
-
-
+			<script src="coincoin.js"></script>
+	
 
 		<script>
 
+	
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var SCREEN_WIDTH = window.innerWidth;
@@ -518,11 +519,13 @@
 
 				ray = new THREE.Raycaster();
 				ray.ray.direction.set( 0, -1, 0 );
+						load_coincoin(scene,physicsObjects);
 
                 // Run at 60FPS target
 		        requestAnimationFrame( renderLoadScene );
                 // Simulate physics
 		        scene.simulate();
+
 			}
 
 			function onDocumentMouseMove(event) {
