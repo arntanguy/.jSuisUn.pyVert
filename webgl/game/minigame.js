@@ -10,140 +10,140 @@ var SPAWN_TIME = 500;
 var objects = new Array();
 var point_text = document.createElement('div');
 
-var initScene, render, applyForce, setMousePosition, mouse_position,
-	ground_material, box_material, evil_box_material,
-	projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
-var hand;
-var background_music = new Audio('../sounds/minigame_background.ogg');
+var mg_initScene, mg_render, mg_applyForce, mg_setMousePosition, mg_mouse_position,
+	mg_groundMaterial, mg_boxMaterial, mg_evilBoxMaterial,
+	mg_projector, mg_renderer, mg_renderStats, mg_physics_stats, mg_scene, mg_ground, mg_light, mg_camera, mg_box, mg_boxes = [];
+var mg_hand;
+var mg_backgroundMusic = new Audio('../sounds/minigame_background.ogg');
 
-initScene = function() {
-    background_music.volume = 0.9;
-    background_music.addEventListener('ended', function() {
+mg_initScene = function() {
+    mg_backgroundMusic.volume = 0.9;
+    mg_backgroundMusic.addEventListener('ended', function() {
         this.currentTime = 0;
         this.play();
     }, false);
-    background_music.play();
+    mg_backgroundMusic.play();
     
-	projector = new THREE.Projector;
+	mg_projector = new THREE.Projector;
 	
-	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.shadowMapEnabled = true;
-	renderer.shadowMapSoft = true;
-	document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+	mg_renderer = new THREE.WebGLRenderer({ antialias: true });
+	mg_renderer.setSize( window.innerWidth, window.innerHeight );
+	mg_renderer.shadowMapEnabled = true;
+	mg_renderer.shadowMapSoft = true;
+	document.getElementById( 'viewport_minigame' ).appendChild( mg_renderer.domElement );
 	
-	render_stats = new Stats();
-	render_stats.domElement.style.position = 'absolute';
-	render_stats.domElement.style.top = '1px';
-	render_stats.domElement.style.zIndex = 100;
-	//document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
+	mg_renderStats = new Stats();
+	mg_renderStats.domElement.style.position = 'absolute';
+	mg_renderStats.domElement.style.top = '1px';
+	mg_renderStats.domElement.style.zIndex = 100;
+	//document.getElementById( 'viewport_minigame' ).appendChild( mg_renderStats.domElement );
 
-	physics_stats = new Stats();
-	physics_stats.domElement.style.position = 'absolute';
-	physics_stats.domElement.style.top = '50px';
-	physics_stats.domElement.style.zIndex = 100;
-	//document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
+	mg_physics_stats = new Stats();
+	mg_physics_stats.domElement.style.position = 'absolute';
+	mg_physics_stats.domElement.style.top = '50px';
+	mg_physics_stats.domElement.style.zIndex = 100;
+	//document.getElementById( 'viewport_minigame' ).appendChild( mg_physics_stats.domElement );
 	
-	scene = new Physijs.Scene;
+	mg_scene = new Physijs.Scene;
 	// fog
-	scene.fog = new THREE.FogExp2(0x000000, 0.04);
+	mg_scene.fog = new THREE.FogExp2(0x000000, 0.04);
 	// gravity
-	scene.setGravity(new THREE.Vector3( 0, -8, 0 ));
-	scene.addEventListener(
+	mg_scene.setGravity(new THREE.Vector3( 0, -8, 0 ));
+	mg_scene.addEventListener(
 		'update',
 		function() {
-			scene.simulate( undefined, 1 );
-			physics_stats.update();
+			mg_scene.simulate( undefined, 1 );
+			mg_physics_stats.update();
 		}
 	);
 	
-	camera = new THREE.PerspectiveCamera(
+	mg_camera = new THREE.PerspectiveCamera(
 		35,
 		window.innerWidth / window.innerHeight,
 		1,
 		1000
 	);
-	camera.position.set(0, 2, 6);
-	camera.lookAt(new THREE.Vector3(0, 1.5, -1));
-	scene.add( camera );
+	mg_camera.position.set(0, 2, 6);
+	mg_camera.lookAt(new THREE.Vector3(0, 1.5, -1));
+	mg_scene.add( mg_camera );
 	
 	// window resize
-    THREEx.WindowResize(renderer, camera);
+    THREEx.WindowResize(mg_renderer, mg_camera);
     // allow 'p' to make screenshot
-    THREEx.Screenshot.bindKey(renderer);
+    THREEx.Screenshot.bindKey(mg_renderer);
     // allow 'f' to go fullscreen where this feature is supported
     if( THREEx.FullScreen.available() ){
         THREEx.FullScreen.bindKey();
     }
 	
 	// Light
-	light = new THREE.DirectionalLight( 0xFFFFFF );
-	light.position.set( 20, 40, -15 );
-	light.target.position.copy( scene.position );
-	light.castShadow = true;
-	light.shadowCameraLeft = -30;
-	light.shadowCameraTop = -30;
-	light.shadowCameraRight = 30;
-	light.shadowCameraBottom = 30;
-	light.shadowCameraNear = 10;
-	light.shadowCameraFar = 100;
-	light.shadowBias = -.0001
-	light.shadowMapWidth = light.shadowMapHeight = 2048;
-	light.shadowDarkness = .7;
-	scene.add( light );
+	mg_light = new THREE.DirectionalLight( 0xFFFFFF );
+	mg_light.position.set( 20, 40, -15 );
+	mg_light.target.position.copy( mg_scene.position );
+	mg_light.castShadow = true;
+	mg_light.shadowCameraLeft = -30;
+	mg_light.shadowCameraTop = -30;
+	mg_light.shadowCameraRight = 30;
+	mg_light.shadowCameraBottom = 30;
+	mg_light.shadowCameraNear = 10;
+	mg_light.shadowCameraFar = 100;
+	mg_light.shadowBias = -.0001
+	mg_light.shadowMapWidth = mg_light.shadowMapHeight = 2048;
+	mg_light.shadowDarkness = .7;
+	mg_scene.add( mg_light );
 	
 	// add subtle blue ambient lighting
     var ambientLight = new THREE.AmbientLight(0x333333);
-    scene.add(ambientLight);
+    mg_scene.add(ambientLight);
 	
 	/***** Materials ********************************/
-	ground_material = Physijs.createMaterial(
+	mg_groundMaterial = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/rocks.jpg' ) }),
 		.7, // high friction
 		.2 // low restitution
 	);
-	ground_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	ground_material.map.repeat.set( 7, 7 );
+	mg_groundMaterial.map.wrapS = mg_groundMaterial.map.wrapT = THREE.RepeatWrapping;
+	mg_groundMaterial.map.repeat.set( 7, 7 );
 	
-	/*box_material = Physijs.createMaterial(
+	/*mg_boxMaterial = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/plywood.jpg' ) }),
 		.4, // low friction
 		.3 // high restitution
 	);
-	box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	box_material.map.repeat.set( .1, .1 );
+	mg_boxMaterial.map.wrapS = mg_groundMaterial.map.wrapT = THREE.RepeatWrapping;
+	mg_boxMaterial.map.repeat.set( .1, .1 );
 	
-	evil_box_material = Physijs.createMaterial(
+	mg_evilBoxMaterial = Physijs.createMaterial(
 		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/water.jpg' ) }),
 		.4, // low friction
 		.3 // high restitution
 	);
-	evil_box_material.map.wrapS = ground_material.map.wrapT = THREE.RepeatWrapping;
-	evil_box_material.map.repeat.set( .1, .1 );*/
+	mg_evilBoxMaterial.map.wrapS = mg_groundMaterial.map.wrapT = THREE.RepeatWrapping;
+	mg_evilBoxMaterial.map.repeat.set( .1, .1 );*/
 	/************************************************/
 	
 	/* Ground */
-	ground = new Physijs.BoxMesh(
+	mg_ground = new Physijs.BoxMesh(
 		new THREE.CubeGeometry(100, 1, 100),
-		ground_material,
+		mg_groundMaterial,
 		0 // mass
 	);
-	ground.receiveShadow = true;
-	scene.add( ground );
+	mg_ground.receiveShadow = true;
+	mg_scene.add( mg_ground );
 	
-	/* hand */
-	hand = new Physijs.BoxMesh(
+	/* mg_hand */
+	mg_hand = new Physijs.BoxMesh(
 			new THREE.CylinderGeometry( 0.3, 0.2, 0.2, 80, 5, false ),
 			new THREE.MeshNormalMaterial(),
 			0
 	);
-	hand.position.set(0, 1.1, 2);
-	hand.castShadow = true;
-	scene.add(hand);
+	mg_hand.position.set(0, 1.1, 2);
+	mg_hand.castShadow = true;
+	mg_scene.add(mg_hand);
 	
 	
 	// handle collisions
-	hand.addEventListener('collision', function(object) {
+	mg_hand.addEventListener('collision', function(object) {
 	    // give points
 	    if(object.evil) {
 	        points--;
@@ -156,16 +156,16 @@ initScene = function() {
 	        new Audio('../sounds/bonus.ogg').play();
 	    }
 	    point_text.innerHTML = points+" points";
-        // animate hand
+        // animate mg_hand
         
         //remove object
         object.finished = true;
-        scene.remove( object );
+        mg_scene.remove( object );
         object = null;
     });
-    ground.addEventListener('collision', function(object) {
-	    // if it is an object lost by the player on the ground
-	    if(object.id != hand.id) {
+    mg_ground.addEventListener('collision', function(object) {
+	    // if it is an object lost by the player on the mg_ground
+	    if(object.id != mg_hand.id) {
 	        object.finished = true;
 	    }
     });
@@ -216,7 +216,7 @@ initScene = function() {
 		        objects[i].evil = true;
 		        objects[i].castShadow = true;
 		        objects[i].finished = false;
-                scene.add( objects[i] );
+                mg_scene.add( objects[i] );
             });
 		    
 		}
@@ -240,7 +240,7 @@ initScene = function() {
 		            objects[i].castShadow = true;
 		            objects[i].finished = false;
                     objects[i].evil = false;
-                    scene.add( objects[i] );
+                    mg_scene.add( objects[i] );
                 });
             }
             else {
@@ -262,7 +262,7 @@ initScene = function() {
 		            objects[i].castShadow = true;
 		            objects[i].finished = false;
                     objects[i].evil = false;
-                    scene.add( objects[i] );
+                    mg_scene.add( objects[i] );
                 });
             }
 		    
@@ -271,7 +271,7 @@ initScene = function() {
 		// destroying oldest object
         if( i >= MAX_OBJ ) {
             if(objects[i-MAX_OBJ] != null) {
-                scene.remove( objects[i-MAX_OBJ] );
+                mg_scene.remove( objects[i-MAX_OBJ] );
                 objects[i-MAX_OBJ] = null;
             }
         }
@@ -300,38 +300,38 @@ initScene = function() {
     }());
 
 
-	requestAnimationFrame( render );
-	scene.simulate();
+	requestAnimationFrame( mg_render );
+	mg_scene.simulate();
 };
 
-render = function() {
-	requestAnimationFrame( render );
-	renderer.render( scene, camera );
-	render_stats.update();
+mg_render = function() {
+	requestAnimationFrame( mg_render );
+	mg_renderer.render( mg_scene, mg_camera );
+	mg_renderStats.update();
 	
-	// moving the hand through y axis
+	// moving the mg_hand through y axis
     var shortest_distance = 1000;
     var shortest_obj = null;
     for(var obj in objects) {
         if(objects[obj] != null && objects[obj].finished == false) {
-            if( Math.abs(objects[obj].position.x - hand.position.x) < shortest_distance) {
-                shortest_distance = Math.abs(objects[obj].position.x - hand.position.x);
+            if( Math.abs(objects[obj].position.x - mg_hand.position.x) < shortest_distance) {
+                shortest_distance = Math.abs(objects[obj].position.x - mg_hand.position.x);
                 shortest_obj = objects[obj];
             }
         }
     }
     if(shortest_obj != null &&
-      Math.abs(shortest_obj.position.z - hand.position.z) > 0.05) {
-          var distanceZ = shortest_obj.position.z - hand.position.z;
-          if((shortest_obj.position.z - hand.position.z) > 0.3) distanceZ = 0.3;
-          if((shortest_obj.position.z - hand.position.z) < -0.3) distanceZ = -0.3;
-          hand.translateZ( distanceZ );
-          hand.__dirtyPosition = true;
+      Math.abs(shortest_obj.position.z - mg_hand.position.z) > 0.05) {
+          var distanceZ = shortest_obj.position.z - mg_hand.position.z;
+          if((shortest_obj.position.z - mg_hand.position.z) > 0.3) distanceZ = 0.3;
+          if((shortest_obj.position.z - mg_hand.position.z) < -0.3) distanceZ = -0.3;
+          mg_hand.translateZ( distanceZ );
+          mg_hand.__dirtyPosition = true;
     }
         
 };
 	
-window.onload = initScene;
+window.onload = mg_initScene;
 
 
 /************ Gesture analysis *******************/
@@ -344,48 +344,48 @@ pointerOpts.pointer.crossColor	= {r:   50, g: 255, b:   50};
 pointerOpts.colorFilter.r	= {min:   0, max: 60};
 pointerOpts.colorFilter.g	= {min: 110, max: 255};
 pointerOpts.colorFilter.b	= {min:   0, max: 80};
-aGesture.addPointer("hand", pointerOpts);
+aGesture.addPointer("mg_hand", pointerOpts);
 
-aGesture.bind("mousemove.hand", function(event){
-    // moving the hand through x axis (user controlled)
-    if(hand.position.z >= 2) {
+aGesture.bind("mousemove.mg_hand", function(event){
+    // moving the mg_hand through x axis (user controlled)
+    if(mg_hand.position.z >= 2) {
 	    if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*3) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((event.x-0.5)*3) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
         else {
-            hand.translateX(( ((0.5-event.x)*-3) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((0.5-event.x)*-3) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
 	}
-	else if(hand.position.z < 2 && hand.position.z > 0) {
+	else if(mg_hand.position.z < 2 && mg_hand.position.z > 0) {
 	    if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*4) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((event.x-0.5)*4) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
         else {
-            hand.translateX(( ((0.5-event.x)*-4) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((0.5-event.x)*-4) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
 	}
-    else if(hand.position.z < 0 && hand.position.z > -2) {
+    else if(mg_hand.position.z < 0 && mg_hand.position.z > -2) {
 	    if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*5.5) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((event.x-0.5)*5.5) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
         else {
-            hand.translateX(( ((0.5-event.x)*-5.5) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((0.5-event.x)*-5.5) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
 	}
 	else {
 	    if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*8) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((event.x-0.5)*8) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
         else {
-            hand.translateX(( ((0.5-event.x)*-8) - hand.position.x));
-            hand.__dirtyPosition = true;
+            mg_hand.translateX(( ((0.5-event.x)*-8) - mg_hand.position.x));
+            mg_hand.__dirtyPosition = true;
         }
 	}
     
@@ -416,7 +416,7 @@ function loadFromJSON(path) {
     mesh.position.y = 0;
     mesh.position.x = 0;
     console.log(mesh.id);
-    scene.add( mesh );
+    mg_scene.add( mesh );
     });
 }
 
