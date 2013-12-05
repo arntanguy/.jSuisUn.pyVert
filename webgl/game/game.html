@@ -3,7 +3,7 @@
 	<head>
 		<title>three.js webgl - io - scene loader [blender]</title>
 		<meta charset="utf-8">
-		<meta name="viewport_minigame" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
 			body {
 				background:#000;
@@ -120,7 +120,7 @@
 				color:rgba(0,0,50,1);
 			}
 
-			#g_blocker {
+			#blocker {
 
 				position: absolute;
 
@@ -153,29 +153,6 @@
 	</head>
 
 	<body>
-
-         <!--Viewport for the mini game-->
-        <div id="viewport_minigame" style="position:fixed; z-index:-1; top:0; left:0; bottom:0; right:0;"></div>
-
-		<script src="../../libs/three.js/three.js"></script>
-		<script src="../../libs/three.js/Detector.js"></script>
-		<script src="../../libs/three.js/Stats.js"></script>
-		<script src="../../libs/three.js/controls/PointerLockControls.js"></script>
-		<script src="../../libs/PhysicsSceneLoader.js"></script>
-		<script src="../../tools/helpers/AxisHelper.js"></script>
-	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
-		<script src="coincoin.js"></script>
-        <script src="minigame.js"></script>
-	
-        <!--Dependencies for minigame-->
-        <script type="text/javascript" src='../../libs/threex/THREEx.WindowResize.js'></script>
-        <script type="text/javascript" src="../../libs/threex/THREEx.screenshot.js"></script>
-        <script type="text/javascript" src="../../libs/threex/THREEx.FullScreen.js"></script>
-        <script type="text/javascript" src="../../libs/stats.js"></script>
-        <script type="text/javascript" src="../../libs/imageprocessing.js"></script>
-        <script type="text/javascript" src="../../libs/dat.gui/dat.gui.js"></script>
-        <script type="text/javascript" src="../../libs/augmentedgesture.js"></script>
-
 		<div id="info">
 			<a href="http://threejs.org">three.js</a> - scene loader test [blender]
             <p></p>
@@ -193,19 +170,30 @@
 
 			<center>
 				<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
-                <div id="g_blocker">
+                <div id="blocker">
 				<div id="start" class="disabled">Start</div>
                 </div>
 			</center>
 		</div>
 
-    	<div id="g_blocker"> </div>
+    	<div id="blocker">
+    
+        </div>
 
-
+		<script src="../../libs/three.js/three.js"></script>
+		<script src="../../libs/three.js/Detector.js"></script>
+		<script src="../../libs/three.js/Stats.js"></script>
+		<script src="../../libs/three.js/controls/PointerLockControls.js"></script>
+		<script src="../../libs/PhysicsSceneLoader.js"></script>
+		<script src="../../tools/helpers/AxisHelper.js"></script>
+	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
+			<script src="coincoin.js"></script>
+	
 
 		<script>
 
-            var Game = function() {	
+	
+            var Game = function() {
 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 			var SCREEN_WIDTH = window.innerWidth;
@@ -214,34 +202,34 @@
 	        Physijs.scripts.worker = '../../libs/physijs/physijs_worker.js';
 	        Physijs.scripts.ammo = '../../libs/physijs/examples/js/ammo.js';
 
-			var g_container,stats;
+			var container,stats;
 
-			var g_camera, g_scene, g_loaded;
-            var g_physicsObjects;
-			var g_renderer;
+			var camera, scene, loaded;
+            var physicsObjects;
+			var renderer;
 
-			var g_mesh, g_zmesh, g_geometry;
+			var mesh, zmesh, geometry;
 
-			var g_mouseX = 0, g_mouseY = 0;
+			var mouseX = 0, mouseY = 0;
 
-			var g_windowHalfX = window.innerWidth / 2;
-			var g_windowHalfY = window.innerHeight / 2;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
 
             // Mouse/Keyboard control
-			var g_controls, g_time = Date.now();
+			var controls, time = Date.now();
             // Object pointed by mouse
-			var g_ray;
-            var g_debug = true;
+			var ray;
+            var debug = true;
 
 
             /* ======================== INIT POINTERLOCK ==================== */
 
-			var g_blocker = document.getElementById( 'g_blocker' );
-			var g_instructions = document.getElementById( 'start' );
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'start' );
 			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-			var g_havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-			if ( g_havePointerLock ) {
+			if ( havePointerLock ) {
 
 				var element = document.body;
 
@@ -249,19 +237,19 @@
 
 					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
 
-						g_controls.enabled = true;
+						controls.enabled = true;
 
-						g_blocker.style.display = 'none';
+						blocker.style.display = 'none';
 
 					} else {
 
-						g_controls.enabled = false;
+						controls.enabled = false;
 
-						g_blocker.style.display = '-webkit-box';
-						g_blocker.style.display = '-moz-box';
-						g_blocker.style.display = 'box';
+						blocker.style.display = '-webkit-box';
+						blocker.style.display = '-moz-box';
+						blocker.style.display = 'box';
 
-						g_instructions.style.display = '';
+						instructions.style.display = '';
 
 					}
 
@@ -269,7 +257,7 @@
 
 				var pointerlockerror = function ( event ) {
 
-					g_instructions.style.display = '';
+					instructions.style.display = '';
 
 				}
 
@@ -282,9 +270,9 @@
 				document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
 				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-				g_instructions.addEventListener( 'click', function ( event ) {
+				instructions.addEventListener( 'click', function ( event ) {
 
-					g_instructions.style.display = 'none';
+					instructions.style.display = 'none';
 
 					// Ask the browser to lock the pointer
 					element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -320,13 +308,13 @@
 
 			} else {
 
-				g_instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+				instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 
 			}
 
 
             // adding 3D sound to the world
-			var g_Sound = function ( sources, radius, volume ) {
+			var Sound = function ( sources, radius, volume ) {
 
 				var audio = document.createElement( 'audio' );
 
@@ -343,8 +331,8 @@
 					audio.play();
 				}
 
-				this.update = function ( g_controls ) {
-					var distance = this.position.distanceTo( g_controls.getPosition() );
+				this.update = function ( controls ) {
+					var distance = this.position.distanceTo( controls.getPosition() );
 					if ( distance <= radius ) {
 						audio.volume = volume * ( 1 - distance / radius );
 					} else {
@@ -356,8 +344,8 @@
 			var game_sound;
 
 
-			g_init();
-			g_animate();
+			init();
+			animate();
 
 			function $( id ) {
 
@@ -365,16 +353,16 @@
 
 			}
 
-			function g_handleUpdate( result, pieces ) {
+			function handle_update( result, pieces ) {
 				refreshSceneView( result );
-				//g_renderer.initWebGLObjects( result.g_scene );
+				//renderer.initWebGLObjects( result.scene );
 
 				var m, material, count = 0;
 				for ( m in result.materials ) {
 					material = result.materials[ m ];
 					if ( ! ( material instanceof THREE.MeshFaceMaterial ) ) {
 						if( !material.program ) {
-							g_renderer.initMaterial( material, result.scene.__lights, result.scene.fog );
+							renderer.initMaterial( material, result.scene.__lights, result.scene.fog );
 							count += 1;
 							if( count > pieces ) {
 								break;
@@ -384,59 +372,58 @@
 				}
 			}
 
-			function g_init() {
+			function init() {
 
-				g_container = document.createElement( 'div' );
-				document.body.appendChild( g_container );
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
 
-				var loadScene = g_createLoadScene();
+				var loadScene = createLoadScene();
 
-				g_camera = loadScene.camera;
-				g_scene = loadScene.scene;
-
-
-				g_renderer = new THREE.WebGLRenderer();
-				g_renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-				g_renderer.domElement.style.position = "relative";
-				g_container.appendChild( g_renderer.domElement );
+				camera = loadScene.camera;
+				scene = loadScene.scene;
 
 
-				g_controls = new THREE.PointerLockControls( g_camera );
-				g_scene.add( g_controls.getObject() );
-                console.log(g_controls);
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+				renderer.domElement.style.position = "relative";
+				container.appendChild( renderer.domElement );
 
-				g_ray = new THREE.Raycaster();
-				g_ray.ray.direction.set( 0, -1, 0 );
+
+				controls = new THREE.PointerLockControls( camera );
+				scene.add( controls.getObject() );
+                console.log(controls);
+
+				ray = new THREE.Raycaster();
+				ray.ray.direction.set( 0, -1, 0 );
 
 				stats = new Stats();
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
 				stats.domElement.style.right = '0px';
 				stats.domElement.style.zIndex = 100;
-				g_container.appendChild( stats.domElement );
+				container.appendChild( stats.domElement );
 				
-
-				game_sound = new g_Sound( [ '../sounds/minigame_background.ogg' ], 50, 1 );
+				game_sound = new Sound( [ '../sounds/minigame_background.ogg' ], 50, 1 );
 				game_sound.position.set(0, 10, 0);
 				game_sound.play();
 
-				$( "start" ).addEventListener( 'click', g_onStartClick, false );
+				$( "start" ).addEventListener( 'click', onStartClick, false );
 
 				var callbackProgress = function( progress, result ) {
 
 					var bar = 250,
 						total = progress.total_models + progress.total_textures,
-						g_loaded = progress.loaded_models + progress.loaded_textures;
+						loaded = progress.loaded_models + progress.loaded_textures;
 
 					if ( total )
-						bar = Math.floor( bar * g_loaded / total );
+						bar = Math.floor( bar * loaded / total );
 
 					$( "bar" ).style.width = bar + "px";
 
 					count = 0;
 					for ( var m in result.materials ) count++;
 
-					g_handleUpdate( result, Math.floor( count/total ) );
+					handle_update( result, Math.floor( count/total ) );
 
 				}
 
@@ -444,15 +431,15 @@
 
                     console.log(result);
 
-                    g_loaded = result;
-                    g_physicsObjects = result.physicsObjects;
+                    loaded = result;
+                    physicsObjects = result.physicsObjects;
 
 					$( "message" ).style.display = "none";
 					$( "progressbar" ).style.display = "none";
 					$( "start" ).style.display = "block";
 					$( "start" ).className = "enabled";
 
-					g_handleUpdate( result, 1 );
+					handle_update( result, 1 );
 
 				}
 
@@ -466,23 +453,23 @@
 
 				$( "plus_exp" ).addEventListener( 'click', createToggle( "exp" ), false );
 
-				window.addEventListener( 'resize', g_onWindowResize, false );
+				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
 
-			function g_onWindowResize() {
+			function onWindowResize() {
 
-				g_windowHalfX = window.innerWidth / 2;
-				g_windowHalfY = window.innerHeight / 2;
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
 
-				g_camera.aspect = window.innerWidth / window.innerHeight;
-				g_camera.updateProjectionMatrix();
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
 
-				g_renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
 
-			function g_setButtonActive( id ) {
+			function setButtonActive( id ) {
 
 				$( "start" ).style.backgroundColor = "green";
 
@@ -491,65 +478,65 @@
 
     
             /**
-             * Start g_scene
+             * Start scene
              * Play physics simulation
              **/
-			function g_onStartClick() {
+			function onStartClick() {
 
 				$( "progress" ).style.display = "none";
 
-				g_camera = g_loaded.currentCamera;
-				g_camera.aspect = window.innerWidth / window.innerHeight;
-				g_camera.updateProjectionMatrix();
+				camera = loaded.currentCamera;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
 
-				g_scene = g_loaded.scene;
-		        g_scene.setGravity(new THREE.Vector3( 0, -9.8, 0 ));
+				scene = loaded.scene;
+		        scene.setGravity(new THREE.Vector3( 0, -9.8, 0 ));
                 console.log("Scene type");
-                console.log(g_scene);
-		        g_scene.addEventListener(
+                console.log(scene);
+		        scene.addEventListener(
 		        	'update',
 		        	function() {
-		        		g_scene.simulate( undefined, 1 );
+		        		scene.simulate( undefined, 1 );
 		        		//physics_stats.update();
 		        	}
 		        );
 
                 /**
-                 * Get "ground" g_mesh object, and assign its mass to 0
+                 * Get "ground" mesh object, and assign its mass to 0
                  */
                 console.log("all objects");
-                console.log(g_loaded.objects);
+                console.log(loaded.objects);
                 console.log("physics objects");
-                console.log(g_loaded.physicsObjects);
+                console.log(loaded.physicsObjects);
                 var axis = new THREE.AxisHelper(20);
-                g_scene.add(axis);
+                scene.add(axis);
 
-                g_scene.remove(g_controls.getObject());
-				g_controls = new THREE.PointerLockControls( g_camera );
-				g_scene.add( g_controls.getObject() );
+                scene.remove(controls.getObject());
+				controls = new THREE.PointerLockControls( camera );
+				scene.add( controls.getObject() );
 
-				g_ray = new THREE.Raycaster();
-				g_ray.ray.direction.set( 0, -1, 0 );
-				load_coincoin(g_scene,g_physicsObjects);
+				ray = new THREE.Raycaster();
+				ray.ray.direction.set( 0, -1, 0 );
+						load_coincoin(scene,physicsObjects);
 
                 // Run at 60FPS target
-		        requestAnimationFrame( g_renderLoadScene );
+		        requestAnimationFrame( renderLoadScene );
                 // Simulate physics
-		        g_scene.simulate();
+		        scene.simulate();
 
 			}
 
-			function g_onDocumentMouseMove(event) {
+			function onDocumentMouseMove(event) {
 
-				g_mouseX = ( event.clientX - g_windowHalfX );
-				g_mouseY = ( event.clientY - g_windowHalfY );
+				mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
 
 			}
 
             /**
-             * Creates a dummy loading g_scene full of cubes
+             * Creates a dummy loading scene full of cubes
              */
-			function g_createLoadScene() {
+			function createLoadScene() {
 
 				var result = {
 
@@ -559,17 +546,17 @@
 				};
 				result.camera.position.z = 100;
 
-				var object, g_geometry, material, light, count = 500, range = 200;
+				var object, geometry, material, light, count = 500, range = 200;
 
                 /**
-                 * Display loading g_scene: loads of random cubes
+                 * Display loading scene: loads of random cubes
                  */
 				material = new THREE.MeshLambertMaterial( { color:0xffffff } );
-				g_geometry = new THREE.CubeGeometry( 5, 5, 5 );
+				geometry = new THREE.CubeGeometry( 5, 5, 5 );
 
 				for( var i = 0; i < count; i++ ) {
 
-					object = new THREE.Mesh( g_geometry, material );
+					object = new THREE.Mesh( geometry, material );
 
 					object.position.x = ( Math.random() - 0.5 ) * range;
 					object.position.y = ( Math.random() - 0.5 ) * range;
@@ -600,62 +587,62 @@
 			}
 
 
-			function g_animate() {
+			function animate() {
 
-				requestAnimationFrame( g_animate );
+				requestAnimationFrame( animate );
 
-				g_render();
+				render();
 				stats.update();
 			}
 
-			function g_renderLoadScene() {
-				g_renderer.render( g_scene, g_camera );
+			function renderLoadScene() {
+				renderer.render( scene, camera );
 			}
             var material = new THREE.LineBasicMaterial({
                     color: 0x0000ff
                 });
             var line = {};
-			function g_render() {
-
+			function render() {
+//console.log(physicsObjects["CoinCoin.0"]);
                 /**
                  * Check for nearby objects in view direction 
                  **/
-                //console.log(g_closestFunction());
+                //console.log(closestObject());
 
-                direction = g_controls.getLookDirection().clone();
-                position = g_controls.getPosition().clone();
+                direction = controls.getLookDirection().clone();
+                position = controls.getPosition().clone();
 
-                g_rayCasting(position.clone(), direction.clone());
+                rayCasting(position.clone(), direction.clone());
 
                 //// Debug direction
-                if(g_debug) {
-                    var g_geometry = new THREE.Geometry();
-                    //g_geometry.vertices.push(new THREE.Vector3(0,0,0));
-                    //g_geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
-                    g_geometry.vertices.push(position.clone());
-                    g_geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
-                    g_scene.remove(line);
-                    line = new THREE.Line(g_geometry, material);
-                    g_scene.add(line);
+                if(debug) {
+                    var geometry = new THREE.Geometry();
+                    //geometry.vertices.push(new THREE.Vector3(0,0,0));
+                    //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
+                    geometry.vertices.push(position.clone());
+                    geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
+                    scene.remove(line);
+                    line = new THREE.Line(geometry, material);
+                    scene.add(line);
                 }
 
 
 
-				g_controls.update( Date.now() - g_time );
+				controls.update( Date.now() - time );
 
-				g_time = Date.now();
+				time = Date.now();
                 
-				g_renderer.render( g_scene, g_camera );
-				game_sound.update( g_controls );
+				renderer.render( scene, camera );
+				game_sound.update( controls );
 			}
 
 
-            function g_closestFunction()
+            function closestObject()
             {
                 var closest = {};
                 var min = 10000000;
-                for(obj in g_physicsObjects) {
-                    dist = g_distanceFromObject(g_physicsObjects[obj]);
+                for(obj in physicsObjects) {
+                    dist = distanceFromObject(physicsObjects[obj]);
                     if(dist<min) {
                         min = dist; 
                         closest=obj;
@@ -668,9 +655,9 @@
              * Returns the distance at which we are form object (in the sense
              of norm2 
              **/
-            function g_distanceFromObject(obj) {
+            function distanceFromObject(obj) {
                 var cubePos= obj.position;
-                var cameraPos = g_controls.getObject().position;
+                var cameraPos = controls.getObject().position;
                 var dist =
                 Math.sqrt((cubePos.y-cameraPos.x)*(cubePos.x-cameraPos.x),(cubePos.y-cameraPos.y)*(cubePos.y-cameraPos.y),(cubePos.z-cameraPos.z)*(cubePos.z-cameraPos.z));
 
@@ -680,13 +667,13 @@
             /**
              * Doesn't work
              **/
-            function g_rayCasting(origin, direction) {
-                g_ray.ray.origin = origin.clone();
-                g_ray.ray.direction = direction.clone().normalize();
+            function rayCasting(origin, direction) {
+                ray.ray.origin = origin.clone();
+                ray.ray.direction = direction.clone().normalize();
 
 
-                for (var m in g_physicsObjects) {
-                    var intersects = g_ray.intersectObject( g_physicsObjects[m] );
+                for (var m in physicsObjects) {
+                    var intersects = ray.intersectObject( physicsObjects[m] );
 
                     if ( intersects.length > 0 ) {
                         // Normal vector of the meshes' face we hit
@@ -696,7 +683,7 @@
                         //// And calculate the reflection vector
                         //var rV = n.multiplyScalar(-2 * vV.dot(nV)).addSelf(vV);;
 
-                        console.log("intersect with "+g_physicsObjects[m].name);
+                        console.log("intersect with "+physicsObjects[m].name);
                     }
                 }
 
@@ -718,7 +705,7 @@
 
             /* ================================================================================ 
              * SCENE EXPLORER
-             * Just for g_debug purposes
+             * Just for debug purposes
              * This section is used to display all available objects and
              * properties into an html tree
              *  =============================================================================== */
@@ -758,7 +745,7 @@
 
             /**
              * Add objects into HTML tree
-             * Just for g_debug purposes
+             * Just for debug purposes
              */
 			function generateSection( label, id, objects ) {
 
@@ -780,7 +767,7 @@
 
             /**
              * Add objects into HTML tree
-             * Just for g_debug purposes
+             * Just for debug purposes
              */
 			function generateSceneView( result ) {
 
@@ -804,7 +791,8 @@
             /* ================================================================================ 
              * END SCENE EXPLORER
              *  =============================================================================== */
-        }();
+            }();
+
 		</script>
 
 	</body>
