@@ -402,7 +402,7 @@
 				stats.domElement.style.zIndex = 100;
 				container.appendChild( stats.domElement );
 				
-				game_sound = new Sound( [ '../minigame/sounds/minigame_background.ogg' ], 50, 1 );
+				game_sound = new Sound( [ '../sounds/minigame_background.ogg' ], 50, 1 );
 				game_sound.position.set(0, 10, 0);
 				game_sound.play();
 
@@ -633,8 +633,6 @@
                 
 				renderer.render( scene, camera );
 				game_sound.update( controls );
-				console.log("cam "+controls.getPosition().x+" "+controls.getPosition().y+" "+controls.getPosition().z);
-				console.log("sound "+game_sound.position.x+" "+game_sound.position.y+" "+game_sound.position.z);
 			}
 
 

@@ -312,16 +312,9 @@
 
 
             // adding 3D sound to the world
-			var Sound = function ( sources, radius, volume ) {
+			var Sound = function ( source, radius, volume ) {
 
-				var audio = document.createElement( 'audio' );
-
-				for ( var i = 0; i < sources.length; i ++ ) {
-					var source = document.createElement( 'source' );
-					source.src = sources[ i ];
-
-					audio.appendChild( source );
-				}
+				var audio = source;
 
 				this.position = new THREE.Vector3();
 
@@ -401,9 +394,9 @@
 				stats.domElement.style.zIndex = 100;
 				container.appendChild( stats.domElement );
 				
-				game_sound = new Sound( [ '../minigame/sounds/minigame_background.ogg' ], 50, 1 );
-				game_sound.position.set(0, 10, 0);
-				game_sound.play();
+				var game_sound_source = new Audio('../minigame/sounds/minigame_background.ogg');
+
+				game_sound_source.play();
 
 				$( "start" ).addEventListener( 'click', onStartClick, false );
 
@@ -633,8 +626,6 @@
                 
 				renderer.render( scene, camera );
 				game_sound.update( controls );
-				console.log("cam "+controls.getPosition().x+" "+controls.getPosition().y+" "+controls.getPosition().z);
-				console.log("sound "+game_sound.position.x+" "+game_sound.position.y+" "+game_sound.position.z);
 			}
 
 
