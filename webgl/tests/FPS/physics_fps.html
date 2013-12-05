@@ -329,8 +329,8 @@
 					audio.play();
 				}
 
-				this.update = function ( camera ) {
-					var distance = this.position.distanceTo( camera.position );
+				this.update = function ( controls ) {
+					var distance = this.position.distanceTo( controls.getPosition() );
 					if ( distance <= radius ) {
 						audio.volume = volume * ( 1 - distance / radius );
 					} else {
@@ -401,8 +401,8 @@
 				stats.domElement.style.zIndex = 100;
 				container.appendChild( stats.domElement );
 				
-				game_sound = new Sound( [ '../minigame/sounds/minigame_background.ogg' ], 10, 1 );
-				game_sound.position.set(0, 0, 0);
+				game_sound = new Sound( [ '../minigame/sounds/minigame_background.ogg' ], 50, 1 );
+				game_sound.position.set(0, 10, 0);
 				game_sound.play();
 
 				$( "start" ).addEventListener( 'click', onStartClick, false );
@@ -632,8 +632,8 @@
 				time = Date.now();
                 
 				renderer.render( scene, camera );
-				game_sound.update( camera );
-				console.log("cam "+camera.position.x+" "+camera.position.y+" "+camera.position.z);
+				game_sound.update( controls );
+				console.log("cam "+controls.getPosition().x+" "+controls.getPosition().y+" "+controls.getPosition().z);
 				console.log("sound "+game_sound.position.x+" "+game_sound.position.y+" "+game_sound.position.z);
 			}
 
