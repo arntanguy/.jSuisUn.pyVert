@@ -120,34 +120,6 @@
 				color:rgba(0,0,50,1);
 			}
 
-			#instructions {
-
-				width: 100%;
-				height: 100%;
-
-				display: -webkit-box;
-				display: -moz-box;
-				display: box;
-
-				-webkit-box-orient: horizontal;
-				-moz-box-orient: horizontal;
-				box-orient: horizontal;
-
-				-webkit-box-pack: center;
-				-moz-box-pack: center;
-				box-pack: center;
-
-				-webkit-box-align: center;
-				-moz-box-align: center;
-				box-align: center;
-
-				color: #ffffff;
-				text-align: center;
-
-				cursor: pointer;
-
-			}
-
 			#blocker {
 
 				position: absolute;
@@ -164,12 +136,26 @@
 				padding:0 0 0.5em 2em;
 			}
 
+        #cursor {
+          background:transparent;
+          color:#ff;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          width: 50;
+          height: 50;
+          margin-top: -25px;
+          margin-left: -25px;
+          text-align:center;
+          z-index:300;
+        }
 		</style>
 	</head>
 
 	<body>
 		<div id="info">
 			<a href="http://threejs.org">three.js</a> - scene loader test [blender]
+            <p></p>
 		</div>
 
 		<div id="scene_explorer">
@@ -177,12 +163,16 @@
 			<div id="section_exp"></div>
 		</div>
 
+        <div id="cursor">o</div>
+
 		<div id="progress">
 			<span id="message">Loading ...</span>
 
 			<center>
 				<div id="progressbar" class="shadow"><div id="bar" class="shadow"></div></div>
+                <div id="blocker">
 				<div id="start" class="disabled">Start</div>
+                </div>
 			</center>
 		</div>
 
@@ -237,7 +227,7 @@
             /* ======================== INIT POINTERLOCK ==================== */
 
 			var blocker = document.getElementById( 'blocker' );
-			var instructions = document.getElementById( 'instructions' );
+			var instructions = document.getElementById( 'start' );
 			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
@@ -426,7 +416,6 @@
 				$( "progress" ).style.display = "block";
 
 
-                //THREE.Scene.prototype = Physijs.Scene.prototype
 				var loader = new PhysicsSceneLoader();
 				loader.callbackProgress = callbackProgress;
 				loader.load( "../../assets/js/scene.js", callbackFinished );
@@ -492,15 +481,12 @@
                 var axis = new THREE.AxisHelper(20);
                 scene.add(axis);
 
-				scene.add( controls.getObject() );
-
+                scene.remove(controls.getObject());
 				controls = new THREE.PointerLockControls( camera );
 				scene.add( controls.getObject() );
 
 				ray = new THREE.Raycaster();
 				ray.ray.direction.set( 0, -1, 0 );
-
-				scene.add( controls.getObject() );
 
                 // Run at 60FPS target
 		        requestAnimationFrame( renderLoadScene );
@@ -586,25 +572,39 @@
                 /**
                  * Check for nearby objects in view direction 
                  **/
-				controls.isOnObject( false );
-
-				ray.ray.origin.copy( controls.getObject().position );
-				ray.ray.origin.y -= 10;
-
-				var intersections = ray.intersectObjects( loaded.objects );
-				if ( intersections.length > 0 ) {
-					var distance = intersections[ 0 ].distance;
-					if ( distance > 0 && distance < 10 ) {
-						controls.isOnObject( true );
-					}
-				}
+                detectCollision();
 
 				controls.update( Date.now() - time );
+
 				time = Date.now();
                 
 				renderer.render( scene, camera );
 			}
 
+               var material = new THREE.LineBasicMaterial({
+                color: 0x0000ff
+                 });
+
+            function detectCollision() {
+           
+				ray.ray.origin.copy( controls.getObject().position );
+				//ray.ray.origin.y -= 10;
+                console.log(ray.ray.origin.y);
+
+				var intersections = ray.intersectObjects( loaded.objects );
+
+				if ( intersections.length > 0 ) {
+
+					var distance = intersections[ 0 ].distance;
+
+                    console.log("intersect");
+					if ( distance > 0 && distance < 10 ) {
+
+					}
+
+				} 
+
+            }
 
 
 
