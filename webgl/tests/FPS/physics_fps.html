@@ -588,9 +588,9 @@
 
                 //// Debug direction
                  var geometry = new THREE.Geometry();
-                 //geometry.vertices.push(new THREE.Vector3(0,0,0));
+                 geometry.vertices.push(new THREE.Vector3(0,0,0));
                  geometry.vertices.push(position.add(direction.multiplyScalar(10)));
-                 geometry.vertices.push(position);
+                 //geometry.vertices.push(position);
                  scene.remove(line);
                  line = new THREE.Line(geometry, material);
                  scene.add(line);

@@ -183,8 +183,10 @@ THREE.PointerLockControls = function ( camera ) {
 
     this.getLookDirection = function() {
 
-        var pitch = pitchObject.rotation.x;
+        var pitch = pitchObject.rotation.x + Math.pi;
         var yaw = yawObject.rotation.y;
+        //var yaw = pitchObject.rotation.x;
+        //var pitch = yawObject.rotation.y;
 
         //xzLen = Math.cos(pitch);
         //x = xzLen * Math.cos(yaw);
@@ -198,9 +200,9 @@ THREE.PointerLockControls = function ( camera ) {
         var sinYaw = Math.sin(yaw);
         var cosYaw = Math.cos(yaw);
        
-        x = sinPitch * cosYaw; 
-        y = sinPitch * sinYaw; 
-        z = cosPitch;
+        x = cosPitch * cosYaw; 
+        z = - cosPitch * sinYaw; 
+        y = sinPitch;
 
        // var x = Math.cos(yaw)*Math.cos(pitch);
        // var y = Math.sin(yaw)*Math.cos(pitch);
