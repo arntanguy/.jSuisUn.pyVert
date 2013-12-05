@@ -577,13 +577,15 @@
                  **/
                 //console.log(closestObject());
 
-                var direction = controls.getLookDirection().clone();
-                var position = controls.getPosition().clone();
+                direction = controls.getLookDirection().clone();
+                position = controls.getPosition().clone();
+                console.log(direction);
 
                 //// Debug direction
                  var geometry = new THREE.Geometry();
                  geometry.vertices.push(new THREE.Vector3(0,0,0));
-                 geometry.vertices.push(position.add(direction.multiplyScalar(10)));
+                 geometry.vertices.push((new
+                 THREE.Vector3(0,0,0)).add(direction.multiplyScalar(1000)));
                  //geometry.vertices.push(position);
                  scene.remove(line);
                  line = new THREE.Line(geometry, material);
