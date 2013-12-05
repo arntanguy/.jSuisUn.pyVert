@@ -418,7 +418,7 @@ PhysicsSceneLoader.prototype = {
 							parent.add( object );
 
 							result.objects[ objID ] = object;
-                                                        result.physicsObjects[ objID ] = object;
+                            result.physicsObjects[ objID ] = object;
 
 						}
 
