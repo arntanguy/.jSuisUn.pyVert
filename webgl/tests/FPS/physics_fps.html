@@ -209,6 +209,7 @@
 			var container,stats;
 
 			var camera, scene, loaded;
+            var physicsObjects;
 			var renderer;
 
 			var mesh, zmesh, geometry;
@@ -336,7 +337,7 @@
 					material = result.materials[ m ];
 					if ( ! ( material instanceof THREE.MeshFaceMaterial ) ) {
 						if( !material.program ) {
-							console.log(m);
+							//console.log(m);
 							renderer.initMaterial( material, result.scene.__lights, result.scene.fog );
 							count += 1;
 							if( count > pieces ) {
@@ -403,6 +404,7 @@
                     console.log(result);
 
                     loaded = result;
+                    physicsObjects = result.physicsObjects;
 
 					$( "message" ).style.display = "none";
 					$( "progressbar" ).style.display = "none";
@@ -477,7 +479,10 @@
                 //loaded.objects["Ground"].mass = 0;
                 
 
-                console.log("Cube pos: "+loaded.objects["Cube"]);
+                console.log("all objects");
+                console.log(loaded.objects);
+                console.log("physics objects");
+                console.log(loaded.physicsObjects);
                 var axis = new THREE.AxisHelper(20);
                 scene.add(axis);
 
@@ -572,7 +577,7 @@
                 /**
                  * Check for nearby objects in view direction 
                  **/
-                detectCollision();
+                console.log(closestObject());
 
 				controls.update( Date.now() - time );
 
@@ -581,27 +586,47 @@
 				renderer.render( scene, camera );
 			}
 
-               var material = new THREE.LineBasicMaterial({
-                color: 0x0000ff
-                 });
 
-            function detectCollision() {
-           
+            function closestObject()
+            {
+                var closest = {};
+                var min = 10000000;
+                for(obj in physicsObjects) {
+                    dist = distanceFromObject(physicsObjects[obj]);
+                    if(dist<min) {
+                        min = dist; 
+                        closest=obj;
+                    }
+                }
+                return closest;
+            }
+
+            /**
+             * Returns the distance at which we are form object (in the sense
+             of norm2 
+             **/
+            function distanceFromObject(obj) {
+                var cubePos= obj.position;
+                var cameraPos = controls.getObject().position;
+                var dist =
+                Math.sqrt((cubePos.y-cameraPos.x)*(cubePos.x-cameraPos.x),(cubePos.y-cameraPos.y)*(cubePos.y-cameraPos.y),(cubePos.z-cameraPos.z)*(cubePos.z-cameraPos.z));
+
+                return dist;
+            }
+
+            /**
+             * Doesn't work
+             **/
+            function rayCasting() {
 				ray.ray.origin.copy( controls.getObject().position );
 				//ray.ray.origin.y -= 10;
-                console.log(ray.ray.origin.y);
+                //console.log(ray.ray.origin.y);
 
 				var intersections = ray.intersectObjects( loaded.objects );
-
 				if ( intersections.length > 0 ) {
-
 					var distance = intersections[ 0 ].distance;
-
-                    console.log("intersect");
 					if ( distance > 0 && distance < 10 ) {
-
 					}
-
 				} 
 
             }

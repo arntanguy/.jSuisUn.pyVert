@@ -121,6 +121,7 @@ PhysicsSceneLoader.prototype = {
 			materials: {},
 			textures: {},
 			objects: {},
+                        physicsObjects: {},
 			cameras: {},
 			lights: {},
 			fogs: {},
@@ -417,6 +418,7 @@ PhysicsSceneLoader.prototype = {
 							parent.add( object );
 
 							result.objects[ objID ] = object;
+                                                        result.physicsObjects[ objID ] = object;
 
 						}
 
