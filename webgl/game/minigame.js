@@ -1,6 +1,6 @@
 'use strict';
 
-Physijs.scripts.worker = 'vendor/physijs/physijs_worker.js';
+Physijs.scripts.worker = '../libs/physijs/physijs_worker.js';
 Physijs.scripts.ammo = 'examples/js/ammo.js';
 
 /* variables */
@@ -14,7 +14,7 @@ var initScene, render, applyForce, setMousePosition, mouse_position,
 	ground_material, box_material, evil_box_material,
 	projector, renderer, render_stats, physics_stats, scene, ground, light, camera, box, boxes = [];
 var hand;
-var background_music = new Audio('sounds/minigame_background.ogg');
+var background_music = new Audio('../sounds/minigame_background.ogg');
 
 initScene = function() {
     background_music.volume = 0.9;
@@ -98,7 +98,7 @@ initScene = function() {
 	
 	/***** Materials ********************************/
 	ground_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/rocks.jpg' ) }),
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/rocks.jpg' ) }),
 		.7, // high friction
 		.2 // low restitution
 	);
@@ -106,7 +106,7 @@ initScene = function() {
 	ground_material.map.repeat.set( 7, 7 );
 	
 	/*box_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/plywood.jpg' ) }),
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/plywood.jpg' ) }),
 		.4, // low friction
 		.3 // high restitution
 	);
@@ -114,7 +114,7 @@ initScene = function() {
 	box_material.map.repeat.set( .1, .1 );
 	
 	evil_box_material = Physijs.createMaterial(
-		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( 'images/water.jpg' ) }),
+		new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture( '../images/water.jpg' ) }),
 		.4, // low friction
 		.3 // high restitution
 	);
@@ -147,13 +147,13 @@ initScene = function() {
 	    // give points
 	    if(object.evil) {
 	        points--;
-	        var falling_audio = new Audio('sounds/malus.ogg');
+	        var falling_audio = new Audio('../sounds/malus.ogg');
             falling_audio.volume = 0.4;
             falling_audio.play();
 	    }
 	    else {
 	        points++;
-	        new Audio('sounds/bonus.ogg').play();
+	        new Audio('../sounds/bonus.ogg').play();
 	    }
 	    point_text.innerHTML = points+" points";
         // animate hand
@@ -200,7 +200,7 @@ initScene = function() {
         else evil = Math.floor( (Math.random() * 1.5) );
 		if( evil == 0) { // yes evil
 		    var loader = new THREE.JSONLoader(true);
-            loader.load( 'assets/js/coffee-mug.js', function( geometry, materials ) {
+            loader.load( '../assets/js/coffee-mug.js', function( geometry, materials ) {
                 objects[i] = new Physijs.CylinderMesh(
                     geometry,
                     new THREE.MeshFaceMaterial( materials ),
@@ -223,7 +223,7 @@ initScene = function() {
 		else { // not evil
 		    if(Math.floor(Math.random()*2) == 0) {
 		        var loader = new THREE.JSONLoader(true);
-                loader.load( 'assets/js/coffee-mug.js', function( geometry, materials ) {
+                loader.load( '../assets/js/coffee-mug.js', function( geometry, materials ) {
                     objects[i] = new Physijs.CylinderMesh(
                         geometry,
                         new THREE.MeshFaceMaterial( materials ),
@@ -245,7 +245,7 @@ initScene = function() {
             }
             else {
 		        var loader = new THREE.JSONLoader(true);
-                loader.load( 'assets/js/giftbox.js', function( geometry, materials ) {
+                loader.load( '../assets/js/giftbox.js', function( geometry, materials ) {
                     objects[i] = new Physijs.BoxMesh(
                         geometry,
                         new THREE.MeshFaceMaterial( materials ),
@@ -276,7 +276,7 @@ initScene = function() {
             }
         }
         i++;
-        var falling_audio = new Audio('sounds/falling.ogg');
+        var falling_audio = new Audio('../sounds/falling.ogg');
         falling_audio.volume = 0.5;
         falling_audio.play();
         /********************************************************/
