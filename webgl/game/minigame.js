@@ -343,60 +343,62 @@ var MiniGame = function() {
 
     /************ Gesture analysis *******************/
 
-    var aGesture	= new AugmentedGesture().enableDatGui().start().domElementThumbnail();
+    function createGesture() {
+        var aGesture	= new AugmentedGesture().enableDatGui().start().domElementThumbnail();
 
-    // settings for the colour detection
-    var pointerOpts	= new AugmentedGesture.OptionPointer();
-    pointerOpts.pointer.crossColor	= {r:   50, g: 255, b:   50};
-    pointerOpts.colorFilter.r	= {min:   0, max: 60};
-    pointerOpts.colorFilter.g	= {min: 110, max: 255};
-    pointerOpts.colorFilter.b	= {min:   0, max: 80};
-    aGesture.addPointer("hand", pointerOpts);
+        // settings for the colour detection
+        var pointerOpts	= new AugmentedGesture.OptionPointer();
+        pointerOpts.pointer.crossColor	= {r:   50, g: 255, b:   50};
+        pointerOpts.colorFilter.r	= {min:   0, max: 60};
+        pointerOpts.colorFilter.g	= {min: 110, max: 255};
+        pointerOpts.colorFilter.b	= {min:   0, max: 80};
+        aGesture.addPointer("hand", pointerOpts);
 
-    aGesture.bind("mousemove.hand", function(event){
-            // moving the hand through x axis (user controlled)
-            if(hand.position.z >= 2) {
-            if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*3) - hand.position.x));
-            hand.__dirtyPosition = true;
-            }
-            else {
-            hand.translateX(( ((0.5-event.x)*-3) - hand.position.x));
-            hand.__dirtyPosition = true;
-            }
-            }
-            else if(hand.position.z < 2 && hand.position.z > 0) {
-            if(event.x > 0.5) {
-            hand.translateX(( ((event.x-0.5)*4) - hand.position.x));
-            hand.__dirtyPosition = true;
-            }
-            else {
-            hand.translateX(( ((0.5-event.x)*-4) - hand.position.x));
-            hand.__dirtyPosition = true;
-            }
-            }
-            else if(hand.position.z < 0 && hand.position.z > -2) {
+        aGesture.bind("mousemove.hand", function(event){
+                // moving the hand through x axis (user controlled)
+                if(hand.position.z >= 2) {
                 if(event.x > 0.5) {
-                    hand.translateX(( ((event.x-0.5)*5.5) - hand.position.x));
-                    hand.__dirtyPosition = true;
+                hand.translateX(( ((event.x-0.5)*3) - hand.position.x));
+                hand.__dirtyPosition = true;
                 }
                 else {
-                    hand.translateX(( ((0.5-event.x)*-5.5) - hand.position.x));
-                    hand.__dirtyPosition = true;
+                hand.translateX(( ((0.5-event.x)*-3) - hand.position.x));
+                hand.__dirtyPosition = true;
                 }
-            }
-            else {
+                }
+                else if(hand.position.z < 2 && hand.position.z > 0) {
                 if(event.x > 0.5) {
-                    hand.translateX(( ((event.x-0.5)*8) - hand.position.x));
-                    hand.__dirtyPosition = true;
+                hand.translateX(( ((event.x-0.5)*4) - hand.position.x));
+                hand.__dirtyPosition = true;
                 }
                 else {
-                    hand.translateX(( ((0.5-event.x)*-8) - hand.position.x));
-                    hand.__dirtyPosition = true;
+                hand.translateX(( ((0.5-event.x)*-4) - hand.position.x));
+                hand.__dirtyPosition = true;
                 }
-            }
+                }
+                else if(hand.position.z < 0 && hand.position.z > -2) {
+                    if(event.x > 0.5) {
+                        hand.translateX(( ((event.x-0.5)*5.5) - hand.position.x));
+                        hand.__dirtyPosition = true;
+                    }
+                    else {
+                        hand.translateX(( ((0.5-event.x)*-5.5) - hand.position.x));
+                        hand.__dirtyPosition = true;
+                    }
+                }
+                else {
+                    if(event.x > 0.5) {
+                        hand.translateX(( ((event.x-0.5)*8) - hand.position.x));
+                        hand.__dirtyPosition = true;
+                    }
+                    else {
+                        hand.translateX(( ((0.5-event.x)*-8) - hand.position.x));
+                        hand.__dirtyPosition = true;
+                    }
+                }
 
-    });
+        });
+    }
 
     /****** load model **********/
     function loadFromJSON(path) {
@@ -416,6 +418,7 @@ var MiniGame = function() {
 
     function start()
     {
+        createGesture();
         run = true;
     }
 
