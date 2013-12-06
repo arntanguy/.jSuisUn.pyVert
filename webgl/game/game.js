@@ -24,8 +24,13 @@ var Game = function() {
 	//pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 	pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 			11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
+			
+    this.start = start;
+    this.pause = pause;
 
     if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+    var run = false;
 
     var SCREEN_WIDTH = window.innerWidth;
     var SCREEN_HEIGHT = window.innerHeight;
@@ -439,7 +444,7 @@ color: 0x0000ff
 });
 var line = {};
 function render() {
-    //console.log(physicsObjects["CoinCoin.0"]);
+    if(run) {
     /**
      * Check for nearby objects in view direction 
      **/
@@ -486,8 +491,13 @@ function render() {
 
     renderer.render( scene, camera );
     game_sound.update( controls );
+    }
+};
+function start() {
+    run = true;
 }
 
+<<<<<<< HEAD
 function createPoles(scene) {
 	var poleGeo = new THREE.CubeGeometry( 5, 750, 5 ); // Vertical poles height
 	var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );
@@ -564,6 +574,9 @@ function createCloth(scene) {
 	object.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
 }
 
+function pause() {
+    run = false;
+}
 
 function closestObject()
 {

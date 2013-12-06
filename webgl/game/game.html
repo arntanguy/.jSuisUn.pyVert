@@ -143,8 +143,8 @@
           position: fixed;
           top: 50%;
           left: 50%;
-          width: 50;
-          height: 50;
+          width: 50px;
+          height: 50px;
           margin-top: -25px;
           margin-left: -25px;
           text-align:center;
@@ -159,6 +159,14 @@
         }
         #game_viewport {
             position:fixed; z-index:300; top:0; left:0; bottom:0; right:0;
+        }
+        #game {
+                z-index: 100;
+                visibility: visible;
+        }
+        #minigame {
+            z-index: 100;
+            visibility: hidden;
         }
         
         #score {
@@ -179,21 +187,21 @@
             <p></p>
 		</div>
 
-		<div id="scene_explorer">
-			<a id="plus_exp" href="#">[+]</a>
-			<div id="section_exp"></div>
-		</div>
 
+        <div id="encapsulate_game">
         <div id="cursor">o</div>
 
         <div id="score">0 points</div>
-
 
         <div id="minigame">
             <div id="minigame_viewport"></div>
         </div>
 
-        <div id="game">
+        <div id="game" visibility="hidden">
+		    <div id="scene_explorer">
+		    	<a id="plus_exp" href="#">[+]</a>
+		    	<div id="section_exp"></div>
+		    </div>
 		    <div id="progress">
 		    	<span id="message">Loading ...</span>
 		    	<center>
@@ -203,6 +211,7 @@
                     </div>
 		    	</center>
 		    </div>
+        </div>
         </div>
 
 		<script src="../libs/three.js/three.js"></script>
@@ -270,10 +279,14 @@
 
 
         <script src="minigame.js"></script>
+        <script src="swap_context.js"></script>
 
 		<script>
             var game = new Game();  
-            //var minigame = new MiniGame();
+            game.start();
+            var minigame = new MiniGame();
+            swapContext(game, "game", minigame, "minigame");
+            //swapContext(minigame, "minigame", game, "game");
 		</script>
 
 	</body>
