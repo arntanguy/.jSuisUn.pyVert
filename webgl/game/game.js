@@ -342,13 +342,15 @@ var Game = function() {
         scene.add(axis);
 
         scene.remove(controls.getObject());
+        camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
+        camera.position.y = 1.5;
         controls = new THREE.PointerLockControls( camera );
         scene.add( controls.getObject() );
 
         ray = new THREE.Raycaster();
         ray.ray.direction.set( 0, -1, 0 );
-        load_coincoin(scene,physicsObjects);
-        load_stand(scene,physicsObjects);
+        //load_coincoin(scene,physicsObjects);
+        //load_stand(scene,physicsObjects);
 
         // Run at 60FPS target
         requestAnimationFrame( renderLoadScene );
@@ -362,6 +364,8 @@ var Game = function() {
     	direction = controls.getLookDirection().clone();
    		position = controls.getPosition().clone();
 
+		console.log(position);
+		console.log(direction);
     	rayCasting(position.clone(), direction.clone());
 		//rayCasting();;
 	}
@@ -379,7 +383,7 @@ var Game = function() {
 
         var result = {
 
-scene:  new THREE.Scene,
+        scene:  new THREE.Scene,
         camera: new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
 
         };
@@ -446,26 +450,24 @@ function render() {
     /**
      * Check for nearby objects in view direction 
      **/
-    //console.log(closestObject());
+   // console.log(closestObject());
 
-    //direction = controls.getLookDirection().clone();
-    //position = controls.getPosition().clone();
+    direction = controls.getLookDirection().clone();
+    position = controls.getPosition().clone();
 
-    //rayCasting(position.clone(), direction.clone());
+    rayCasting(position.clone(), direction.clone());
 
     //// Debug direction
-//    if(debug) {
-//        var geometry = new THREE.Geometry();
-//        //geometry.vertices.push(new THREE.Vector3(0,0,0));
-//        //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
-//        geometry.vertices.push(position.clone());
-//        geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
-//        scene.remove(line);
-//        line = new THREE.Line(geometry, material);
-//        scene.add(line);
-//    }
-//
-//
+    if(debug) {
+        var geometry = new THREE.Geometry();
+        //geometry.vertices.push(new THREE.Vector3(0,0,0));
+        //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
+        geometry.vertices.push(position.clone());
+        geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
+        scene.remove(line);
+        line = new THREE.Line(geometry, material);
+        scene.add(line);
+    }
 
     controls.update( Date.now() - time );
 
@@ -502,8 +504,8 @@ function closestObject()
  of norm2 
  **/
 function distanceFromObject(obj) {
-    var cubePos= obj.position;
-    var cameraPos = controls.getObject().position;
+    var cubePos= obj.position.clone();
+    var cameraPos = controls.getObject().position.clone();
     var dist =
         Math.sqrt((cubePos.y-cameraPos.x)*(cubePos.x-cameraPos.x),(cubePos.y-cameraPos.y)*(cubePos.y-cameraPos.y),(cubePos.z-cameraPos.z)*(cubePos.z-cameraPos.z));
 
