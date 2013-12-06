@@ -347,6 +347,7 @@ var Game = function() {
         ray = new THREE.Raycaster();
         ray.ray.direction.set( 0, -1, 0 );
         load_coincoin(scene,physicsObjects);
+        load_stand(scene,physicsObjects);
 
         // Run at 60FPS target
         requestAnimationFrame( renderLoadScene );
