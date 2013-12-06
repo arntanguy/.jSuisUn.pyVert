@@ -632,6 +632,21 @@ function rayCasting(origin, direction) {
 			{
 				physicsObjects[m].position.set( Math.random()*10, 50, Math.random()*10);
     			physicsObjects[m].__dirtyPosition = true;
+				point = document.getElementById('score');
+				point.innerHTML = points+" points";
+			}
+			else if(name.indexOf("CGI")!=-1)
+			{
+				document.href = "http://www.cgi.com/fr";
+			}
+			else if(name.indexOf("PIZZA")!=-1)
+			{
+				document.href = "";	
+			}
+			else if(name.indexOf("AR")!=-1)
+			{
+				var minigame = new MiniGame();
+				swapContext(game, "game", minigame, "minigame");
 			}
             // Normal vector of the meshes' face we hit
             //var nV = intersects[0].face.normal;
@@ -640,7 +655,7 @@ function rayCasting(origin, direction) {
             //// And calculate the reflection vector
             //var rV = n.multiplyScalar(-2 * vV.dot(nV)).addSelf(vV);;
 
-            console.log("intersect with "+physicsObjects[m].name);
+//            console.log("intersect with "+physicsObjects[m].name);
         }
     }
 }
