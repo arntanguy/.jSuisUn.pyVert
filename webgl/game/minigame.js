@@ -1,5 +1,5 @@
-'use strict';
 var MiniGame = function() {
+
 Physijs.scripts.worker = '../libs/physijs/physijs_worker.js';
 Physijs.scripts.ammo = 'examples/js/ammo.js';
 
@@ -8,7 +8,7 @@ var MAX_OBJ = 10;
 var points = 0;
 var SPAWN_TIME = 500;
 var objects = new Array();
-var point_text = document.createElement('div');
+var point_text = document.getElementById('div');
 
 var initScene, render, applyForce, setMousePosition, mouse_position,
 	ground_material, box_material, evil_box_material,
@@ -30,19 +30,19 @@ initScene = function() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMapEnabled = true;
 	renderer.shadowMapSoft = true;
-	document.getElementById( 'viewport' ).appendChild( renderer.domElement );
+	document.getElementById( 'minigame_viewport' ).appendChild( renderer.domElement );
 	
 	render_stats = new Stats();
 	render_stats.domElement.style.position = 'absolute';
 	render_stats.domElement.style.top = '1px';
 	render_stats.domElement.style.zIndex = 100;
-	//document.getElementById( 'viewport' ).appendChild( render_stats.domElement );
+	//document.getElementById( 'minigame_viewport' ).appendChild( render_stats.domElement );
 
 	physics_stats = new Stats();
 	physics_stats.domElement.style.position = 'absolute';
 	physics_stats.domElement.style.top = '50px';
 	physics_stats.domElement.style.zIndex = 100;
-	//document.getElementById( 'viewport' ).appendChild( physics_stats.domElement );
+	//document.getElementById( 'minigame_viewport' ).appendChild( physics_stats.domElement );
 	
 	scene = new Physijs.Scene;
 	// fog
@@ -390,19 +390,6 @@ aGesture.bind("mousemove.hand", function(event){
 	}
     
 });
-
-/******* display score **********/
-
-point_text.style.position = 'absolute';
-point_text.style.zIndex = 1;    // if you still don't see the label, try uncommenting this
-point_text.style.fontSize = "40px";
-point_text.style.fontWeight = "bold";
-point_text.style.textShadow = "0px 0px 10px #aaa, 0px 0px 3px #fff";
-point_text.style.id = 'score';
-point_text.innerHTML = "0 points";
-point_text.style.top = 10 + 'px';
-point_text.style.left = 10 + 'px';
-document.body.appendChild(point_text);
 
 /****** load model **********/
 function loadFromJSON(path) {
