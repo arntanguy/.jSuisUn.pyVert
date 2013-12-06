@@ -188,6 +188,7 @@
 		<script src="../../tools/helpers/AxisHelper.js"></script>
 	    <script type="text/javascript" src="../../libs/physijs/physi.js"></script>
 			<script src="coincoin.js"></script>
+			<script src="load_stand.js"></script>
 	
 
 		<script>
@@ -518,6 +519,7 @@
 				ray = new THREE.Raycaster();
 				ray.ray.direction.set( 0, -1, 0 );
 						load_coincoin(scene,physicsObjects);
+						load_stand(scene,physicsObjects);
 
                 // Run at 60FPS target
 		        requestAnimationFrame( renderLoadScene );
