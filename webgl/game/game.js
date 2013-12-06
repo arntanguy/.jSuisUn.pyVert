@@ -323,6 +323,7 @@ var Game = function() {
      **/
     function onStartClick() {
 
+		document.addEventListener( 'mousedown', onDocumentMouseDown, false );
         $( "progress" ).style.display = "none";
 
         camera = loaded.currentCamera;
@@ -367,6 +368,14 @@ var Game = function() {
 
     }
 
+	
+	function onDocumentMouseDown( event ) {
+    	direction = controls.getLookDirection().clone();
+   		position = controls.getPosition().clone();
+
+    	rayCasting(position.clone(), direction.clone());
+		//rayCasting();;
+	}
     function onDocumentMouseMove(event) {
 
         mouseX = ( event.clientX - windowHalfX );
@@ -450,10 +459,10 @@ function render() {
      **/
     //console.log(closestObject());
 
-    direction = controls.getLookDirection().clone();
-    position = controls.getPosition().clone();
+    //direction = controls.getLookDirection().clone();
+    //position = controls.getPosition().clone();
 
-    rayCasting(position.clone(), direction.clone());
+    //rayCasting(position.clone(), direction.clone());
 
     /*** cloth ****/
     /*var p = cloth.particles;
@@ -472,18 +481,18 @@ function render() {
     /************/
 
     //// Debug direction
-    if(debug) {
-        var geometry = new THREE.Geometry();
-        //geometry.vertices.push(new THREE.Vector3(0,0,0));
-        //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
-        geometry.vertices.push(position.clone());
-        geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
-        scene.remove(line);
-        line = new THREE.Line(geometry, material);
-        scene.add(line);
-    }
-
-
+//    if(debug) {
+//        var geometry = new THREE.Geometry();
+//        //geometry.vertices.push(new THREE.Vector3(0,0,0));
+//        //geometry.vertices.push(position.add(direction.multiplyScalar(1000)));
+//        geometry.vertices.push(position.clone());
+//        geometry.vertices.push(position.clone().add(direction.clone().multiplyScalar(1000)));
+//        scene.remove(line);
+//        line = new THREE.Line(geometry, material);
+//        scene.add(line);
+//    }
+//
+//
 
     controls.update( Date.now() - time );
 
@@ -616,6 +625,12 @@ function rayCasting(origin, direction) {
         var intersects = ray.intersectObject( physicsObjects[m] );
 
         if ( intersects.length > 0 ) {
+			name = physicsObjects[m].name;
+			if(name.indexOf("coincoin")!=-1)
+			{
+				physicsObjects[m].position.set( Math.random()*10, 50, Math.random()*10);
+    			physicsObjects[m].__dirtyPosition = true;
+			}
             // Normal vector of the meshes' face we hit
             //var nV = intersects[0].face.normal;
             // Velocity vector (of the character)
@@ -626,7 +641,6 @@ function rayCasting(origin, direction) {
             console.log("intersect with "+physicsObjects[m].name);
         }
     }
-
 }
 
 
