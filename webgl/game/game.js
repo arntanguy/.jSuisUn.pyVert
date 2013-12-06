@@ -342,6 +342,8 @@ var Game = function() {
         scene.add(axis);
 
         scene.remove(controls.getObject());
+        camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
+        camera.position.y = 1.5;
         controls = new THREE.PointerLockControls( camera );
         scene.add( controls.getObject() );
 
@@ -381,7 +383,7 @@ var Game = function() {
 
         var result = {
 
-scene:  new THREE.Scene,
+        scene:  new THREE.Scene,
         camera: new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
 
         };
@@ -453,7 +455,7 @@ function render() {
     direction = controls.getLookDirection().clone();
     position = controls.getPosition().clone();
 
-    //rayCasting(position.clone(), direction.clone());
+    rayCasting(position.clone(), direction.clone());
 
     //// Debug direction
     if(debug) {
@@ -466,8 +468,6 @@ function render() {
         line = new THREE.Line(geometry, material);
         scene.add(line);
     }
-
-
 
     controls.update( Date.now() - time );
 
