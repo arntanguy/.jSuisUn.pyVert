@@ -1,0 +1,27 @@
+* Géolocalisation d'une adresse IP (pays d'origine)
+* Données provenants de plusieurs sites marchands
+* Phishing => liste des sites qui sont connus pour faire du phishing
+
+* Utiliser les réseaux sociaux pour confirmer le lieu géographique d'un client, son activité au moment de passer la commande, ou pour vérifier simplement qu'il existe.
+* Date de création de l'adresse mail utilisée
+* Liste des fournisseurs d'adresse mail jetable
+
+* Nombre de commandes adressées à un même code postal dans les derniers jours (stats pour voir l'augmentation)
+* Nombre de commandes pour un produit donné au cours des derniers jours (stats pour voir l'augmentation)
+
+* Blacklist d'IP (appartenant à un botnet par exemple)
+
+* Vérifications de rapidité
+* Modèles de calcul de l'évaluation des fraudes
+
+* Données pour lutter contre le Pharming
+
+* Usurpation d'identité
+* Vérification de la validité de la carte
+
+* Fournir des données INTERNATIONALES !!!
+
+* Se concentrer sur les applis web et sur les applis mobiles
+
+* Données différentes pour chaque marché
+* Données différentes pour chaque pays
