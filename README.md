@@ -9,7 +9,7 @@ Technologies used:
 
 * HTML5/CSS3/Javascript
 
-* Javascript libraries: dat.gui, physijs, three.js, threex, augmentedgesture, imageprocessing, PhysicsSceneLoader, stats
+* Javascript libraries: dat.gui, physijs, three.js, threex, augmentedgesture.js, imageprocessing.js, PhysicsSceneLoader, stats.js
 
 * WebGL
 
