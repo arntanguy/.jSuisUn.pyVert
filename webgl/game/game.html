@@ -190,7 +190,6 @@
 
 
         <div id="encapsulate_game">
-        <div id="cursor">o</div>
 
         <div id="score">0 points</div>
 
@@ -199,6 +198,7 @@
         </div>
 
         <div id="game" visibility="hidden" style="z-index:-1">
+            <div id="cursor">o</div>
 		    <div id="scene_explorer">
 		    	<a id="plus_exp" href="#">[+]</a>
 		    	<div id="section_exp"></div>
@@ -287,6 +287,7 @@
             game.start();
             var minigame = new MiniGame();
             swapContext(game, "game", minigame, "minigame");
+            //swapContext(minigame, "minigame", game, "game");
 		</script>
 
 	</body>
