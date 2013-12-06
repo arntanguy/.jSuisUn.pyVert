@@ -170,7 +170,7 @@ var Game = function() {
 
         this.update = function ( controls ) {
             var distance = this.position.distanceTo( controls.getPosition() );
-            if ( distance <= radius ) {
+            if ( distance <= radius  && run==true) {
                 audio.volume = volume * ( 1 - distance / radius );
             } else {
                 audio.volume = 0;
@@ -501,8 +501,8 @@ function render() {
     time = Date.now();
 
     renderer.render( scene, camera );
-    game_sound.update( controls );
     }
+    game_sound.update( controls );
 };
 function start() {
     run = true;
