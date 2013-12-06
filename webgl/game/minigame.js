@@ -25,7 +25,6 @@ var MiniGame = function() {
                 this.currentTime = 0;
                 this.play();
                 }, false);
-        background_music.play();
 
         projector = new THREE.Projector;
 
@@ -289,19 +288,21 @@ var MiniGame = function() {
 
         var spawn_time = SPAWN_TIME;
         (function loop() {
-         spawn_time = Math.random()*6000;
-         // the game is getting faster and faster...
-         if(i > 0)
-         spawn_time = spawn_time - i*100;
-         if(spawn_time < 0) spawn_time = 0;
-         spawn_time = spawn_time + Math.random()*1500;
-         // minimal spawn time security
-         spawn_time = spawn_time + SPAWN_TIME;
-         console.log(spawn_time);
-         setTimeout(function() {
-             spawnObject();
-             loop();  
-             }, spawn_time);
+             spawn_time = Math.random()*6000;
+             // the game is getting faster and faster...
+             if(i > 0)
+             spawn_time = spawn_time - i*100;
+             if(spawn_time < 0) spawn_time = 0;
+             spawn_time = spawn_time + Math.random()*1500;
+             // minimal spawn time security
+             spawn_time = spawn_time + SPAWN_TIME;
+             //console.log(spawn_time);
+             if(run) {
+                 setTimeout(function() {
+                     spawnObject();
+                     loop();  
+                     }, spawn_time);
+             }
          }());
 
 
@@ -419,11 +420,13 @@ var MiniGame = function() {
     function start()
     {
         createGesture();
+        background_music.play();
         run = true;
     }
 
     function pause()
     {
+        background_music.pause();
         run = false;
     }
 

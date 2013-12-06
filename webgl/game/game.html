@@ -153,6 +153,7 @@
 
         #minigame_viewport {
             position:fixed; z-index:100; top:0; left:0; bottom:0; right:0;
+            z-index: -1;
         }
         #game_viewport {
             position:fixed; z-index:200; top:0; left:0; bottom:0; right:0;
@@ -197,7 +198,7 @@
             <div id="minigame_viewport"></div>
         </div>
 
-        <div id="game" visibility="hidden">
+        <div id="game" visibility="hidden" style="z-index:-1">
 		    <div id="scene_explorer">
 		    	<a id="plus_exp" href="#">[+]</a>
 		    	<div id="section_exp"></div>
@@ -215,6 +216,7 @@
         </div>
 
 		<script src="../libs/three.js/three.js"></script>
+		<script src="../libs/three.js/Cloth.js"></script>
 		<script src="../libs/three.js/Detector.js"></script>
 		<script src="../libs/three.js/Stats.js"></script>
 		<script src="../libs/three.js/controls/PointerLockControls.js"></script>
@@ -233,6 +235,49 @@
         <script src="../libs/imageprocessing.js"></script>
         <script src="../libs/dat.gui/dat.gui.js"></script>
         <script src="../libs/augmentedgesture.js"></script>
+        
+        <script type="x-shader/x-fragment" id="fragmentShaderDepth">
+
+			uniform sampler2D texture;
+			varying vec2 vUV;
+
+			vec4 pack_depth( const in float depth ) {
+
+				const vec4 bit_shift = vec4( 256.0 * 256.0 * 256.0, 256.0 * 256.0, 256.0, 1.0 );
+				const vec4 bit_mask  = vec4( 0.0, 1.0 / 256.0, 1.0 / 256.0, 1.0 / 256.0 );
+				vec4 res = fract( depth * bit_shift );
+				res -= res.xxyz * bit_mask;
+				return res;
+
+			}
+
+			void main() {
+
+				vec4 pixel = texture2D( texture, vUV );
+
+				if ( pixel.a < 0.5 ) discard;
+
+				gl_FragData[ 0 ] = pack_depth( gl_FragCoord.z );
+
+			}
+		</script>
+
+		<script type="x-shader/x-vertex" id="vertexShaderDepth">
+
+			varying vec2 vUV;
+
+			void main() {
+
+				vUV = 0.75 * uv;
+
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+				gl_Position = projectionMatrix * mvPosition;
+
+			}
+
+		</script>
+
 
         <script src="minigame.js"></script>
         <script src="swap_context.js"></script>
@@ -242,7 +287,6 @@
             game.start();
             var minigame = new MiniGame();
             swapContext(game, "game", minigame, "minigame");
-            swapContext(minigame, "minigame", game, "game");
 		</script>
 
 	</body>
