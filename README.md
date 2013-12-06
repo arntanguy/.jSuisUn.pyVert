@@ -9,8 +9,10 @@ Technologies used:
 
 * HTML5/CSS3/Javascript
 
+* Javascript libraries: dat.gui, physijs, three.js, threex, augmentedgesture, imageprocessing, PhysicsSceneLoader, stats
+
 * WebGL
 
 * Blender for the 3D conception
 
-(TODO: add libraries)
+
