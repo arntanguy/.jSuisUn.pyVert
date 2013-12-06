@@ -240,9 +240,9 @@
 		<script>
             var game = new Game();  
             game.start();
-            //var minigame = new MiniGame();
-            //swapContext(game, "game", minigame, "minigame");
-            //swapContext(minigame, "minigame", game, "game");
+            var minigame = new MiniGame();
+            swapContext(game, "game", minigame, "minigame");
+            swapContext(minigame, "minigame", game, "game");
 		</script>
 
 	</body>
