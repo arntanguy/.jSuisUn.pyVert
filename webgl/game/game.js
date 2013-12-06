@@ -19,6 +19,12 @@
 
 var Game = function() {
 
+    // Pins linking the cloth with the top pole
+	// There should be as many as the value of xSegs in Cloth.js
+	//pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+	pins = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+			11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ];
+
     if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
     var SCREEN_WIDTH = window.innerWidth;
@@ -34,6 +40,7 @@ var Game = function() {
     var renderer;
 
     var mesh, zmesh, geometry;
+    var clothGeometry;
 
     var mouseX = 0, mouseY = 0;
 
@@ -273,8 +280,12 @@ var Game = function() {
         var loader = new PhysicsSceneLoader();
         loader.callbackProgress = callbackProgress;
         loader.load( "../../assets/js/scene.js", callbackFinished );
-
-
+        /*
+        // Cloth
+		createCloth(scene);
+		// poles
+        createPoles(scene);
+        */
         $( "plus_exp" ).addEventListener( 'click', createToggle( "exp" ), false );
 
         window.addEventListener( 'resize', onWindowResize, false );
@@ -439,6 +450,22 @@ function render() {
 
     rayCasting(position.clone(), direction.clone());
 
+    /*** cloth ****/
+    /*var p = cloth.particles;
+
+	for ( var i = 0, il = p.length; i < il; i ++ ) {
+
+		clothGeometry.vertices[ i ].copy( p[ i ].position );
+
+	}
+
+	clothGeometry.computeFaceNormals();
+	clothGeometry.computeVertexNormals();
+
+	clothGeometry.normalsNeedUpdate = true;
+	clothGeometry.verticesNeedUpdate = true;*/
+    /************/
+
     //// Debug direction
     if(debug) {
         var geometry = new THREE.Geometry();
@@ -459,6 +486,82 @@ function render() {
 
     renderer.render( scene, camera );
     game_sound.update( controls );
+}
+
+function createPoles(scene) {
+	var poleGeo = new THREE.CubeGeometry( 5, 750, 5 ); // Vertical poles height
+	var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );
+
+	// Vertical pole nearest to the "C" of CGI
+	var mesh = new THREE.Mesh( poleGeo, poleMat );
+	mesh.position.x = -260; // Decrease to make the space between the two poles wider
+	mesh.position.y = -62;
+	mesh.receiveShadow = true;
+	mesh.castShadow = true;
+	scene.add( mesh );
+
+	// Vertical pole nearest to the "C" of CGI
+	var mesh = new THREE.Mesh( poleGeo, poleMat );
+	mesh.position.x = 230; // Increase to make the space between the two poles wider
+	mesh.position.y = -62;
+	mesh.receiveShadow = true;
+	mesh.castShadow = true;
+	scene.add( mesh );
+
+	// Horizontal pole at the top
+	var mesh = new THREE.Mesh( new THREE.CubeGeometry( 495, 5, 5 ), poleMat ); // Horizontal pole width
+	mesh.position.y = -250 + 750/2 + 190; // -250 + 750/2 // Horizontal pole height
+	mesh.position.x = -15;
+	mesh.receiveShadow = true;
+	mesh.castShadow = true;
+	scene.add( mesh );
+
+
+	var gg = new THREE.CubeGeometry( 10, 10, 10 );
+	// Foot of the pole nearest to the "I" letter of CGI
+	var mesh = new THREE.Mesh( gg, poleMat );
+	mesh.position.y = -250;
+	mesh.position.x = 125;
+	mesh.receiveShadow = true;
+	mesh.castShadow = true;
+	scene.add( mesh );
+
+	// Foot of the pole nearest to the "C" letter of CGI
+	var mesh = new THREE.Mesh( gg, poleMat );
+	mesh.position.y = -250;
+	mesh.position.x = -125;
+	mesh.receiveShadow = true;
+	mesh.castShadow = true;
+	scene.add( mesh );
+}
+
+function createCloth(scene) {
+	// cloth material
+
+	var clothTexture = THREE.ImageUtils.loadTexture( '../assets/textures/logo_cgi.png' );
+	clothTexture.wrapS = clothTexture.wrapT = THREE.RepeatWrapping;
+	clothTexture.anisotropy = 16;
+
+	var clothMaterial = new THREE.MeshPhongMaterial( { alphaTest: 0.5, ambient: 0xffffff, color: 0xffffff, specular: 0x030303, emissive: 0x111111, shiness: 10, map: clothTexture, side: THREE.DoubleSide } );
+
+	// cloth geometry
+	clothGeometry = new THREE.ParametricGeometry( clothFunction, cloth.w, cloth.h );
+	clothGeometry.dynamic = true;
+	clothGeometry.computeFaceNormals();
+
+	var uniforms = { texture:  { type: "t", value: clothTexture } };
+	var vertexShader = document.getElementById( 'vertexShaderDepth' ).textContent;
+	var fragmentShader = document.getElementById( 'fragmentShaderDepth' ).textContent;
+
+	// cloth mesh
+
+	object = new THREE.Mesh( clothGeometry, clothMaterial );
+	object.position.set( -20, 70, 0 );
+	object.castShadow = true;
+	object.receiveShadow = true;
+	scene.add( object );
+
+	object.customDepthMaterial = new THREE.ShaderMaterial( { uniforms: uniforms, vertexShader: vertexShader, fragmentShader: fragmentShader } );
 }
 
 
