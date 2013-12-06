@@ -354,7 +354,7 @@ var Game = function() {
 
         scene.remove(controls.getObject());
         camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 1000 )
-        camera.position.y = 1.5;
+        //camera.position.y = 1.5;
         controls = new THREE.PointerLockControls( camera );
         scene.add( controls.getObject() );
 
