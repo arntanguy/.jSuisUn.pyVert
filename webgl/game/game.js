@@ -497,7 +497,6 @@ function start() {
     run = true;
 }
 
-<<<<<<< HEAD
 function createPoles(scene) {
 	var poleGeo = new THREE.CubeGeometry( 5, 750, 5 ); // Vertical poles height
 	var poleMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x111111, shiness: 100 } );

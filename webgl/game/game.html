@@ -153,6 +153,7 @@
 
         #minigame_viewport {
             position:fixed; z-index:100; top:0; left:0; bottom:0; right:0;
+            z-index: -1;
         }
         #game_viewport {
             position:fixed; z-index:200; top:0; left:0; bottom:0; right:0;
@@ -197,7 +198,7 @@
             <div id="minigame_viewport"></div>
         </div>
 
-        <div id="game" visibility="hidden">
+        <div id="game" visibility="hidden" style="z-index:-1">
 		    <div id="scene_explorer">
 		    	<a id="plus_exp" href="#">[+]</a>
 		    	<div id="section_exp"></div>
@@ -284,8 +285,6 @@
 		<script>
             var game = new Game();  
             game.start();
-            //var minigame = new MiniGame();
-            //swapContext(game, "game", minigame, "minigame");
             //swapContext(minigame, "minigame", game, "game");
 		</script>
 
